@@ -31,6 +31,7 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/enrolments', require('./routes/enrolments'));
 app.use('/api/gallery', require('./routes/gallery'));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/site-images', require('./routes/siteImages').router);
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));

@@ -23,10 +23,11 @@
 
   <!-- Tabs -->
   <div class="max-w-6xl mx-auto mt-6 px-4">
-    <div class="flex gap-2 mb-6">
+    <div class="flex gap-2 mb-6 flex-wrap">
       <button class="tab-btn active px-5 py-2 rounded-lg font-medium transition" onclick="showTab('enrolments', this)">Enrolments</button>
       <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('contacts', this)">Contact Messages</button>
       <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('gallery', this)">Gallery</button>
+      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('siteimages', this)">Site Images</button>
     </div>
 
     <!-- Enrolments Tab -->
@@ -81,6 +82,12 @@
       </div>
       <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </div>
+
+    <!-- Site Images Tab -->
+    <div id="tab-siteimages" class="hidden">
+      <p class="text-sm text-gray-500 mb-4">These are all images currently used on the website. Upload a replacement to swap any image — the new image will be served from Cloudinary.</p>
+      <div id="site-images-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </div>
   </div>
 
 <script>
@@ -96,7 +103,7 @@ function logout() {
 }
 
 function showTab(name, btn) {
-  ['enrolments','contacts','gallery'].forEach(t => {
+  ['enrolments','contacts','gallery','siteimages'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.add('hidden');
   });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'bg-white'));
@@ -105,6 +112,7 @@ function showTab(name, btn) {
   if (name === 'enrolments') loadEnrolments();
   if (name === 'contacts') loadContacts();
   if (name === 'gallery') loadGallery();
+  if (name === 'siteimages') loadSiteImages();
 }
 
 function authHeaders() {
@@ -242,6 +250,57 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
     msgEl.className = 'mt-3 text-sm text-red-500';
   }
 });
+
+// ── SITE IMAGES ──────────────────────────────────────────────
+async function loadSiteImages() {
+  const res = await fetch(`${API}/site-images`, { headers: authHeaders() });
+  if (res.status === 401) return logout();
+  const data = await res.json();
+  const el = document.getElementById('site-images-grid');
+  el.innerHTML = data.map(img => `
+    <div class="bg-white rounded-xl shadow overflow-hidden" id="si-${img.filename.replace(/[^a-z0-9]/gi,'_')}">
+      <div class="relative">
+        <img src="${img.cloudinaryUrl || img.originalUrl}" alt="${img.filename}"
+          class="w-full h-36 object-cover" onerror="this.src='${img.originalUrl}'" />
+        ${img.cloudinaryUrl ? '<span class="absolute top-1 right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Replaced</span>' : ''}
+      </div>
+      <div class="p-2">
+        <p class="text-xs text-gray-500 truncate mb-2">${img.filename}</p>
+        <label class="block w-full cursor-pointer bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs text-center py-1.5 rounded-lg transition">
+          Replace
+          <input type="file" accept="image/*" class="hidden" onchange="replaceSiteImage('${img.filename}', this)" />
+        </label>
+        ${img.cloudinaryUrl ? `<button onclick="revertSiteImage('${img.filename}')" class="mt-1 w-full text-xs text-red-400 hover:text-red-600 py-1">Revert to original</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function replaceSiteImage(filename, input) {
+  if (!input.files[0]) return;
+  const formData = new FormData();
+  formData.append('image', input.files[0]);
+  const safeId = filename.replace(/[^a-z0-9]/gi,'_');
+  const card = document.getElementById(`si-${safeId}`);
+  card.style.opacity = '0.5';
+  try {
+    const res = await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token()}` },
+      body: formData
+    });
+    if (res.ok) loadSiteImages();
+    else { const d = await res.json(); alert(d.error); card.style.opacity = '1'; }
+  } catch { alert('Upload failed'); card.style.opacity = '1'; }
+}
+
+async function revertSiteImage(filename) {
+  if (!confirm('Revert to original image?')) return;
+  await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, {
+    method: 'DELETE', headers: authHeaders()
+  });
+  loadSiteImages();
+}
 
 // Load enrolments on start
 loadEnrolments();
