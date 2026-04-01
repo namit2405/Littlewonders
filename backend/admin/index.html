@@ -227,6 +227,29 @@ const API = 'https://backend.littlewonderselc.com.au/api';
 const token = () => localStorage.getItem('lw_token');
 if (!token()) window.location.href = '/admin/login.html';
 
+function openSidebar() {
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+function showSection(name, el) {
+  if (window.innerWidth < 768) closeSidebar();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`section-${name}`).classList.add('active');
+  el.classList.add('active');
+  const titles = { dashboard:'Dashboard', enrolments:'Enrolments', contacts:'Messages', gallery:'Gallery', siteimages:'Site Images' };
+  document.getElementById('page-title').textContent = titles[name];
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'enrolments') loadEnrolments();
+  if (name === 'contacts') loadContacts();
+  if (name === 'gallery') loadGallery();
+  if (name === 'siteimages') loadSiteImages();
+}
+
 // Clock
 setInterval(() => {
   document.getElementById('current-time').textContent = new Date().toLocaleString('en-AU', { weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
@@ -536,30 +559,6 @@ async function revertSiteImage(filename) {
 
 // Load dashboard on start
 loadDashboard();
-
-function openSidebar() {
-  document.querySelector('.sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('open');
-}
-function closeSidebar() {
-  document.querySelector('.sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
-function showSection(name, el) {
-  if (window.innerWidth < 768) closeSidebar();
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById(`section-${name}`).classList.add('active');
-  el.classList.add('active');
-  const titles = { dashboard:'Dashboard', enrolments:'Enrolments', contacts:'Messages', gallery:'Gallery', siteimages:'Site Images' };
-  document.getElementById('page-title').textContent = titles[name];
-  if (name === 'dashboard') loadDashboard();
-  if (name === 'enrolments') loadEnrolments();
-  if (name === 'contacts') loadContacts();
-  if (name === 'gallery') loadGallery();
-  if (name === 'siteimages') loadSiteImages();
-}
 </script>
 </body>
 </html>
