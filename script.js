@@ -104,65 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Form validation
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const message = document.getElementById('message').value.trim();
-        
-        if (!name || !email || !phone || !message) {
-            alert('Please fill in all fields');
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address');
-            return;
-        }
-        
-        // Show success message
-        alert('Thank you for your enquiry! We will contact you shortly.');
-        contactForm.reset();
-    });
-}
-
 // Email validation
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
-}
-
-// Enrolment form
-const enrolForm = document.getElementById('enrol-form');
-if (enrolForm) {
-    enrolForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const childName = document.getElementById('child-name').value.trim();
-        const childAge = document.getElementById('child-age').value.trim();
-        const parentName = document.getElementById('parent-name').value.trim();
-        const parentEmail = document.getElementById('parent-email').value.trim();
-        const parentPhone = document.getElementById('parent-phone').value.trim();
-        const program = document.getElementById('program').value;
-        
-        if (!childName || !childAge || !parentName || !parentEmail || !parentPhone || !program) {
-            alert('Please fill in all fields');
-            return;
-        }
-        
-        if (!validateEmail(parentEmail)) {
-            alert('Please enter a valid email address');
-            return;
-        }
-        
-        // Show success message
-        alert('Thank you for your enrolment enquiry! We will contact you within 24 hours to discuss the next steps.');
-        enrolForm.reset();
-    });
 }
 
 // Smooth scroll for anchor links
