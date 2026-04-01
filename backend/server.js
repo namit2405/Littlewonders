@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rate limiting for form submissions
 const formLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,
+  max: 100,
   message: { error: 'Too many submissions, please try again later.' }
 });
 
