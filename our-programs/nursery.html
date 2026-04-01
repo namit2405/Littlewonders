@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nursery Program - Little Wonders Early Learning</title>
+    <link rel="shortcut icon" href="/images1/siteicon.jpeg" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+     <!-- Navigation (Same as index.html) -->
+    <nav id="navbar" class="sticky top-0 z-50 bg-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
+        <div class="flex items-center justify-between h-20 lg:h-24">
+          <button
+            id="mobile-menu-btn"
+            class="lg:hidden p-3 rounded-xl bg-gradient-to-r from-[#8ED16F] to-[#8ED16F] text-white shadow-md hover:scale-110 transition-all duration-300"
+          >
+            <svg
+              id="menu-icon"
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+            <svg
+              id="close-icon"
+              class="w-6 h-6 hidden"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          <!-- Desktop Navigation -->
+           <div
+            class="hidden lg:flex items-center justify-center flex-1 gap-2 xl:gap-3"
+          >
+            <a
+              href="/index.html"
+              class="nav-button active flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              <span class="text-xs xl:text-sm whitespace-nowrap font-bold"
+                >Home</span
+              >
+            </a>
+
+            <a
+              href="/get-to-know-us.html"
+              class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <span class="text-xs xl:text-sm whitespace-nowrap"
+                >Get To Know Us</span
+              >
+            </a>
+
+            <a
+              href="/our-philosophy.html"
+              class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+              <span class="text-xs xl:text-sm whitespace-nowrap"
+                >Our Philosophy</span
+              >
+            </a>
+
+            <!-- Our Programs - DROPDOWN -->
+            <div class="nav-dropdown">
+              <a
+                href="/our-programs.html"
+                class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+                <span class="text-xs xl:text-sm whitespace-nowrap"
+                  >Our Programs <span class="dropdown-arrow">▼</span></span
+                >
+              </a>
+              <div class="dropdown-menu">
+                 <a href="/our-programs/nursery.html" class="dropdown-item"
+                  >Nursery (0 weeks - 12 months)</a
+                >
+
+                <a href="/our-programs/nursery2.html" class="dropdown-item"
+                  >Nursery 2(12months - 18 months)</a
+                >
+
+                <a href="/our-programs/toddlers.html" class="dropdown-item"
+                  >Toddlers (18months - 24 months)</a
+                >
+
+                <a href="/our-programs/toddler2.html" class="dropdown-item"
+                  >Toddlers 2(24months - 36 months)</a
+                >
+
+                <a href="/our-programs/pre-kinder.html" class="dropdown-item"
+                  >Pre-Kinder (3 - 4 years)</a
+                >
+
+                <a href="/our-programs/kindergarten.html" class="dropdown-item"
+                  >Kindergarten (4 - 5 years)</a
+                >
+                 <a href="/our-programs/flexible-sessions.html" class="dropdown-item"
+                  >flexible session</a
+                >
+              </div>
+            </div>
+
+            <!-- Logo in center -->
+            <a
+              href="/index.html"
+              class="px-4 xl:px-8 flex items-center justify-center"
+            >
+              <img
+                src="/images1/logo2.png"
+                alt="Little Wonders Logo"
+                class="h-24 xl:h-28 object-contain transition duration-300 hover:scale-105"
+              />
+            </a>
+
+            <!-- Our Facilities - DROPDOWN -->
+            <div class="nav-dropdown">
+              <a
+                href="/our-facilities.html"
+                class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <span class="text-xs xl:text-sm whitespace-nowrap"
+                  >Our Facilities <span class="dropdown-arrow">▼</span></span
+                >
+              </a>
+              <div class="dropdown-menu">
+                <a href="/our-facilities/bush-garden.html" class="dropdown-item"
+                  >Bush Garden</a
+                >
+                <a href="/our-facilities/chef-kitchen.html" class="dropdown-item"
+                  >Chef-Inspired Kitchen</a
+                >
+              </div>
+            </div>
+
+            <!-- Gallery - DROPDOWN -->
+            <div class="nav-dropdown">
+              <a
+                href="/gallery.html"
+                class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <span class="text-xs xl:text-sm whitespace-nowrap"
+                  >Gallery <span class="dropdown-arrow">▼</span></span
+                >
+              </a>
+              <div class="dropdown-menu">
+                <a href="/gallery/kitchen.html" class="dropdown-item">Kitchen!</a>
+                <a href="/gallery/kindergarten.html" class="dropdown-item"
+                  >Kindergarten</a
+                >
+                <a href="/gallery/nursery.html" class="dropdown-item">Nursery</a>
+                <a href="/gallery/nursery-one.html" class="dropdown-item"
+                  >Nursery One</a
+                >
+                <a href="/gallery/nursery-two.html" class="dropdown-item"
+                  >Nursery Two</a
+                >
+                <a href="/gallery/toddler-one.html" class="dropdown-item"
+                  >Toddler One</a
+                >
+                <a href="/gallery/toddler-two.html" class="dropdown-item"
+                  >Toddler Two</a
+                >
+                <a href="/gallery/toddlers.html" class="dropdown-item"
+                  >Toddlers</a
+                >
+                <a href="/gallery/pre-kinder.html" class="dropdown-item"
+                  >Pre-Kinder</a
+                >
+                <a href="/gallery/kinder.html" class="dropdown-item">Kinder</a>
+              </div>
+            </div>
+
+            <!-- Get In Touch - DROPDOWN -->
+            <div class="nav-dropdown">
+              <a
+                href="/get-in-touch.html"
+                class="nav-button flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <span class="text-xs xl:text-sm whitespace-nowrap"
+                  >Get In Touch <span class="dropdown-arrow">▼</span></span
+                >
+              </a>
+              <div class="dropdown-menu">
+                <a href="/get-in-touch/our-centre-ballarat.html" class="dropdown-item"
+                  >Our Centre in Ballarat</a
+                >
+                <a href="/get-in-touch/work-with-us.html" class="dropdown-item"
+                  >Work With Us</a
+                >
+              </div>
+            </div>
+
+            <a
+              href="/enrol-now.html"
+              class="nav-button cta-nav flex flex-col items-center gap-1 px-4 xl:px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                />
+              </svg>
+              <span class="text-xs xl:text-sm whitespace-nowrap"
+                >Enrol Now</span
+              >
+            </a>
+          </div>
+
+          <!-- Mobile Logo -->
+          <div class="lg:hidden flex-1 flex justify-center items-center">
+            <img
+              src="/images1/logo2.png"
+              alt="Little Wonders Logo"
+              class="h-24 object-contain transition duration-300 hover:scale-105"
+            />
+          </div>
+
+          <div class="lg:hidden w-10"></div>
+        </div>
+      </div>
+
+      <!-- Decorative Color Strip -->
+      <div class="h-2 flex">
+        <div class="flex-1 bg-[#14532D]"></div>
+        <div class="flex-1 bg-[#EAB308]"></div>
+        <div class="flex-1 bg-[#1F2937]"></div>
+        <div class="flex-1 bg-[#FACC15]"></div>
+        <div class="flex-1 bg-[#166534]"></div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="mobile-menu lg:hidden bg-white border-t border-gray-200"
+      >
+        <div class="px-4 py-3 space-y-2">
+         <a
+            href="/index.html"
+            class="mobile-nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span class="text-base">Home</span>
+          </a>
+          <a
+            href="/get-to-know-us.html"
+            class="mobile-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+            <span class="text-base">Get To Know Us</span>
+          </a>
+          <a
+            href="/our-philosophy.html"
+            class="mobile-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            <span class="text-base">Our Philosophy</span>
+          </a>
+          <!-- Our Programs - MOBILE DROPDOWN -->
+          <div class="mobile-dropdown">
+            <div
+              class="mobile-nav-item mobile-dropdown-toggle w-full flex items-center gap-3 px-4 py-3 rounded-2xl"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                />
+              </svg>
+              <span class="text-base flex-1"
+                ><a href="/our-programs.html">Our Programs</a></span
+              >
+
+              <span class="mobile-dropdown-arrow">▼</span>
+            </div>
+            <div class="mobile-submenu">
+                 <a href="/our-programs/nursery.html" class="mobile-submenu-item">Nursery</a>
+    <a href="/our-programs/nursery2.html" class="mobile-submenu-item">Nursery 2</a>
+
+    <a href="/our-programs/toddlers.html" class="mobile-submenu-item">Toddlers</a>
+    <a href="/our-programs/toddlers2.html" class="mobile-submenu-item">Toddlers 2</a>
+
+    <a href="/our-programs/pre-kinder.html" class="mobile-submenu-item">Pre-Kinder</a>
+    <a href="/our-programs/kindergarten.html" class="mobile-submenu-item">Kindergarten</a>
+     <a href="/our-programs/flexible-sessions.html" class="mobile-submenu-item">Flexible Sessions</a>
+            </div>
+          </div>
+          <!-- Our Facilities - MOBILE DROPDOWN -->
+          <div class="mobile-dropdown">
+            <div
+              class="mobile-nav-item mobile-dropdown-toggle w-full flex items-center gap-3 px-4 py-3 rounded-2xl"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <a href="/our-facilities.html">
+                <span class="text-base flex-1">Our Facilities</span></a
+              >
+              <span class="mobile-dropdown-arrow">▼</span>
+            </div>
+            <div class="mobile-submenu">
+              <a href="/our-facilities/bush-garden.html" class="mobile-submenu-item"
+                >Bush Garden</a
+              >
+              <a href="/our-facilities/chef-kitchen.html" class="mobile-submenu-item"
+                >Chef-Inspired Kitchen</a
+              >
+            </div>
+          </div>
+          <!-- Gallery - MOBILE DROPDOWN -->
+          <div class="mobile-dropdown">
+            <div
+              class="mobile-nav-item mobile-dropdown-toggle w-full flex items-center gap-3 px-4 py-3 rounded-2xl"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <span class="text-base flex-1"
+                ><a href="/gallery.html">Gallery</a></span
+              >
+              <span class="mobile-dropdown-arrow">▼</span>
+            </div>
+            <div class="mobile-submenu">
+              <a href="/gallery/kitchen.html" class="mobile-submenu-item"
+                >Kitchen!</a
+              >
+             
+              <a href="/gallery/kindergarten.html" class="mobile-submenu-item"
+                >Kindergarten</a
+              >
+              <a href="/gallery/nursery.html" class="mobile-submenu-item"
+                >Nursery</a
+              >
+              <a href="/gallery/nursery-one.html" class="mobile-submenu-item"
+                >Nursery One</a
+              >
+              <a href="/gallery/toddlers.html" class="mobile-submenu-item"
+                >Toddlers</a
+              >
+              <a href="/gallery/nursery-one.html" class="mobile-submenu-item"
+                >Kinder</a
+              >
+              <a href="/gallery/nursery-two.html" class="mobile-submenu-item"
+                >Nursery Two</a
+              >
+              <a href="/gallery/toddler-one.html" class="mobile-submenu-item"
+                >Toddler One</a
+              >
+              <a href="/gallery/toddler-two.html" class="mobile-submenu-item"
+                >Toddler Two</a
+              >
+              <a href="/gallery/pre-kinder.html" class="mobile-submenu-item"
+                >Pre-Kinder</a
+              >
+              <a href="/gallery/kinder.html" class="mobile-submenu-item"
+                >Kinder</a
+              >
+            </div>
+          </div>
+          <!-- Get In Touch - MOBILE DROPDOWN -->
+          <div class="mobile-dropdown">
+            <div
+              class="mobile-nav-item mobile-dropdown-toggle w-full flex items-center gap-3 px-4 py-3 rounded-2xl"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              <span class="text-base flex-1"
+                ><a href="/get-in-touch.html">Get In Touch</a></span
+              >
+              <span class="mobile-dropdown-arrow">▼</span>
+            </div>
+            <div class="mobile-submenu">
+              <a href="/get-in-touch/our-centre-ballarat.html" class="mobile-submenu-item"
+                >Our Centre in Ballarat</a
+              >
+              <a href="/get-in-touch/work-with-us.html" class="mobile-submenu-item"
+                >Work With Us</a
+              >
+            </div>
+          </div>
+          <a
+            href="/enrol-now.html"
+            class="mobile-nav-item cta-mobile w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 bg-[#F7B733] text-gray-900"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+              />
+            </svg>
+            <span class="text-base">Enrol Now</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="py-16 md:py-20 bg-gradient-to-r from-[#58C7F3] to-[#8ED16F] text-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-4">Nursery Program</h1>
+            <p class="text-2xl sm:text-3xl font-semibold mb-2">6 weeks - 18 months</p>
+            <p class="text-xl">Gentle care and nurturing for our youngest learners</p>
+        </div>
+    </section>
+
+    <!-- Program Overview -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: #58C7F3;">Our Nursery Program</h2>
+                    <p class="text-xl text-gray-700 mb-4 leading-relaxed">
+                        Our Baby Wonders Nursery programs incorporate a range of age
+              appropriate play-based activities and resources to support
+              learning and will help develop your child’s fine and gross motor
+              skills. A beautifully nurturing environment to become independent
+              through our educators encouraging self-feeding and dressing.
+                    </p>
+                    <p class="text-xl text-gray-700 mb-4 leading-relaxed">
+                         Your child will enjoy singing, dancing, creative arts, reading
+              stories, imaginative play and a whole lot more. Our Nursery room
+              gives your child the opportunity to socialise with other children
+              and develop their communication skills
+                    </p>
+                    <p class="text-xl text-gray-700 leading-relaxed">
+                          We provide all nappies and our nappy changing room and bathrooms
+              are located directly off the Nursery rooms to help assist with
+              toilet training.
+                    </p>
+                </div>
+                <div class="rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="/images1/nursery.webp" alt="Nursery Room" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Daily Routine -->
+    <section class="py-16 bg-gradient-to-br from-[#58C7F3]/10 to-[#8ED16F]/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+         6 week to 2 year olds
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #ffee02"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Early Learning Care</h3>
+            <p class="text-gray-700">A safe, nurturing space where babies grow, explore, and build strong developmental foundations.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #ff0088"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Play-Based Growth</h3>
+            <p class="text-gray-700">Fun, age-appropriate activities designed to boost motor skills, creativity, and early learning.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #ff8400"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Nurturing Independence</h3>
+            <p class="text-gray-700">We gently encourage self-feeding, dressing, and confidence in a supportive environment.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #ff0000"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Social Skill Building</h3>
+            <p class="text-gray-700">Interactive play helps children communicate, connect, and grow with others.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #0c7600"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Safe & Loving Space</h3>
+            <p class="text-gray-700">A warm, hygienic nursery with full care support, including nappies and toilet training assistance.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div
+              class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+              style="background-color: #013087"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Gentle Beginnings</h3>
+            <p class="text-gray-700">A loving start where your baby feels safe, happy, and supported every single day.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Learning Activities -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Learning Experiences</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8" style="border-color: #58C7F3;">
+                    <h3 class="text-3xl font-bold mb-4" style="color: #58C7F3;">Sensory Exploration</h3>
+                    <p class="text-lg text-gray-700 mb-4">Safe sensory materials that stimulate curiosity and discovery</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Texture play with different fabrics</li>
+                        <li>• Water and sand play</li>
+                        <li>• Music and sound exploration</li>
+                        <li>• Natural materials discovery</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8" style="border-color: #8ED16F;">
+                    <h3 class="text-3xl font-bold mb-4" style="color: #8ED16F;">Physical Development</h3>
+                    <p class="text-lg text-gray-700 mb-4">Activities supporting gross and fine motor skills</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Tummy time and floor play</li>
+                        <li>• Crawling and cruising spaces</li>
+                        <li>• Reaching and grasping toys</li>
+                        <li>• Baby yoga and stretching</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8" style="border-color: #FFA94D;">
+                    <h3 class="text-3xl font-bold mb-4" style="color: #FFA94D;">Language & Communication</h3>
+                    <p class="text-lg text-gray-700 mb-4">Nurturing early communication and language skills</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Songs, rhymes, and fingerplays</li>
+                        <li>• Story time with picture books</li>
+                        <li>• Responsive conversations</li>
+                        <li>• Sign language basics</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8" style="border-color: #9A6BD8;">
+                    <h3 class="text-3xl font-bold mb-4" style="color: #9A6BD8;">Social & Emotional</h3>
+                    <p class="text-lg text-gray-700 mb-4">Building trust, security, and early relationships</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Consistent, caring routines</li>
+                        <li>• Gentle interactions with peers</li>
+                        <li>• Emotional recognition and response</li>
+                        <li>• Comfort and soothing techniques</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 md:py-24 bg-gradient-to-r from-[#58C7F3] to-[#8ED16F]">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+                Enrol in Our Nursery Program
+            </h2>
+            <p class="text-xl sm:text-2xl text-white mb-8">
+                Give your baby the best start with our nurturing care
+            </p>
+            <a href="/enrol-now.html" class="cta-button inline-block bg-white text-[#58C7F3] px-10 md:px-16 py-5 md:py-6 rounded-full text-xl md:text-2xl font-bold shadow-2xl">
+                Enrol Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+   <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-[#FACC15]">About Little Wonders</h3>
+                    <p class="text-gray-300">Providing exceptional early childhood education in Ballarat and Sebastopol.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-[#FACC15]">Programs</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/our-programs/nursery.html" class="text-gray-300 hover:text-[#8ED16F]">Nursery</a></li>
+                          <li><a href="/our-programs/nursery2.html" class="text-gray-300 hover:text-[#8ED16F]">Nursery two</a></li>
+                        <li><a href="/our-programs/toddlers.html" class="text-gray-300 hover:text-[#8ED16F]">Toddlers</a></li>
+                        <li><a href="/our-programs/toddlers2.html" class="text-gray-300 hover:text-[#8ED16F]">Toddlers two</a></li>
+                        <li><a href="/our-programs/pre-kinder.html" class="text-gray-300 hover:text-[#8ED16F]">Pre-Kinder</a>
+                        </li>
+                        <li><a href="/our-programs/kindergarten.html"
+                                class="text-gray-300 hover:text-[#8ED16F]">Kindergarten</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-[#FACC15]">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/get-to-know-us.html" class="text-gray-300 hover:text-[#FFA94D]">About Us</a></li>
+                        <li><a href="/our-facilities.html" class="text-gray-300 hover:text-[#FFA94D]">Facilities</a></li>
+                        <li><a href="/gallery.html" class="text-gray-300 hover:text-[#FFA94D]">Gallery</a></li>
+                        <li><a href="/index.html" class="text-gray-300 hover:text-[#FFA94D]"> Home</a></li>
+                        <li><a href="/enrol-now.html" class="text-gray-300 hover:text-[#FFA94D]">Enroll Now</a></li>
+                        <li><a href="/our-philosophy.html" class="text-gray-300 hover:text-[#FFA94D]">Philosophy</a></li>
+                        <li><a href="/our-programs.html" class="text-gray-300 hover:text-[#FFA94D]">Programs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-[#FACC15]">Contact</h3>
+                    <p class="text-gray-300 mb-2">Ballarat & Sebastopol, VIC</p>
+                    <p class="text-gray-300 mb-2">(03) 5317 9229</p>
+                    <p class="text-gray-300 mb-2">ballarat@littlewonderselc.com.au</p>
+                    <p class="text-gray-300">Mon-Fri: 6:30am-6:30pm</p>
+                </div>
+            </div>
+
+           <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2026 Little Wonders Early Learning. All rights reserved.</p>
+                <div class="flex gap-4">
+                      <a href="https://www.facebook.com/share/1GSiRB4nnC/?mibextid=wwXIfr" target="_blank"></a>
+                    <div
+                        class="social-icon w-12 h-12 rounded-full bg-[#FACC15] flex items-center justify-center cursor-pointer">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </div>
+                   <a href="  https://www.instagram.com/littlewonders_elcsebastopol?igsh=OW5tcndseXQzZHEz" target="_blank">
+    <div
+        class="social-icon w-12 h-12 rounded-full bg-[#FACC15] flex items-center justify-center cursor-pointer">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+    </div>
+</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal – Little Wonders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-btn.active { background:#7c3aed; color:#fff; }
+    .badge-new { background:#fef3c7; color:#92400e; }
+    .badge-contacted { background:#dbeafe; color:#1e40af; }
+    .badge-enrolled { background:#d1fae5; color:#065f46; }
+    .badge-declined { background:#fee2e2; color:#991b1b; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-purple-700">Little Wonders Admin</h1>
+    <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500">Logout</button>
+  </nav>
+
+  <!-- Tabs -->
+  <div class="max-w-6xl mx-auto mt-6 px-4">
+    <div class="flex gap-2 mb-6">
+      <button class="tab-btn active px-5 py-2 rounded-lg font-medium transition" onclick="showTab('enrolments', this)">Enrolments</button>
+      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('contacts', this)">Contact Messages</button>
+      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('gallery', this)">Gallery</button>
+    </div>
+
+    <!-- Enrolments Tab -->
+    <div id="tab-enrolments">
+      <div id="enrolments-list" class="space-y-4"></div>
+    </div>
+
+    <!-- Contacts Tab -->
+    <div id="tab-contacts" class="hidden">
+      <div id="contacts-list" class="space-y-4"></div>
+    </div>
+
+    <!-- Gallery Tab -->
+    <div id="tab-gallery" class="hidden">
+      <!-- Upload form -->
+      <div class="bg-white rounded-xl shadow p-6 mb-6">
+        <h2 class="font-semibold text-gray-700 mb-4">Upload Image</h2>
+        <form id="upload-form" class="flex flex-wrap gap-4 items-end">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Category</label>
+            <select id="upload-category" class="border rounded-lg px-3 py-2 text-sm">
+              <option value="nursery">Nursery</option>
+              <option value="toddlers">Toddlers</option>
+              <option value="pre-kinder">Pre-Kinder</option>
+              <option value="kindergarten">Kindergarten</option>
+              <option value="kitchen">Kitchen</option>
+              <option value="bush-garden">Bush Garden</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Caption</label>
+            <input type="text" id="upload-caption" placeholder="Optional caption" class="border rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Image</label>
+            <input type="file" id="upload-file" accept="image/*" required class="text-sm" />
+          </div>
+          <button type="submit" class="bg-purple-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-purple-700">Upload</button>
+        </form>
+        <div id="upload-msg" class="mt-3 text-sm hidden"></div>
+      </div>
+      <!-- Filter -->
+      <div class="flex gap-2 mb-4 flex-wrap">
+        <button onclick="loadGallery()" class="px-3 py-1 bg-white rounded-lg text-sm shadow">All</button>
+        <button onclick="loadGallery('nursery')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Nursery</button>
+        <button onclick="loadGallery('toddlers')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Toddlers</button>
+        <button onclick="loadGallery('pre-kinder')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Pre-Kinder</button>
+        <button onclick="loadGallery('kindergarten')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Kindergarten</button>
+        <button onclick="loadGallery('kitchen')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Kitchen</button>
+        <button onclick="loadGallery('bush-garden')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Bush Garden</button>
+      </div>
+      <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </div>
+  </div>
+
+<script>
+const API = 'https://your-render-app.onrender.com/api';
+const token = () => localStorage.getItem('lw_token');
+
+// Auth guard
+if (!token()) window.location.href = '/admin/login.html';
+
+function logout() {
+  localStorage.removeItem('lw_token');
+  window.location.href = '/admin/login.html';
+}
+
+function showTab(name, btn) {
+  ['enrolments','contacts','gallery'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.add('hidden');
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'bg-white'));
+  document.getElementById(`tab-${name}`).classList.remove('hidden');
+  btn.classList.add('active');
+  if (name === 'enrolments') loadEnrolments();
+  if (name === 'contacts') loadContacts();
+  if (name === 'gallery') loadGallery();
+}
+
+function authHeaders() {
+  return { 'Authorization': `Bearer ${token()}`, 'Content-Type': 'application/json' };
+}
+
+// ── ENROLMENTS ──────────────────────────────────────────────
+async function loadEnrolments() {
+  const res = await fetch(`${API}/enrolments`, { headers: authHeaders() });
+  if (res.status === 401) return logout();
+  const data = await res.json();
+  const el = document.getElementById('enrolments-list');
+  if (!data.length) { el.innerHTML = '<p class="text-gray-500">No enrolments yet.</p>'; return; }
+  el.innerHTML = data.map(e => `
+    <div class="bg-white rounded-xl shadow p-5">
+      <div class="flex justify-between items-start flex-wrap gap-2">
+        <div>
+          <p class="font-semibold text-gray-800">${e.childName} <span class="text-sm text-gray-400">(${e.program})</span></p>
+          <p class="text-sm text-gray-500">DOB: ${new Date(e.childDob).toLocaleDateString()} · Start: ${new Date(e.startDate).toLocaleDateString()}</p>
+          <p class="text-sm text-gray-600 mt-1">Parent: ${e.parentName} · ${e.parentPhone} · ${e.parentEmail}</p>
+          ${e.message ? `<p class="text-sm text-gray-500 mt-1 italic">"${e.message}"</p>` : ''}
+          <p class="text-xs text-gray-400 mt-1">Submitted: ${new Date(e.createdAt).toLocaleString()}</p>
+        </div>
+        <div class="flex gap-2 items-center">
+          <select onchange="updateStatus('${e._id}', this.value)" class="text-sm border rounded-lg px-2 py-1">
+            ${['new','contacted','enrolled','declined'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+          </select>
+          <button onclick="deleteEnrolment('${e._id}')" class="text-red-400 hover:text-red-600 text-sm">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function updateStatus(id, status) {
+  await fetch(`${API}/enrolments/${id}/status`, {
+    method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status })
+  });
+}
+
+async function deleteEnrolment(id) {
+  if (!confirm('Delete this enrolment?')) return;
+  await fetch(`${API}/enrolments/${id}`, { method: 'DELETE', headers: authHeaders() });
+  loadEnrolments();
+}
+
+// ── CONTACTS ─────────────────────────────────────────────────
+async function loadContacts() {
+  const res = await fetch(`${API}/contact`, { headers: authHeaders() });
+  if (res.status === 401) return logout();
+  const data = await res.json();
+  const el = document.getElementById('contacts-list');
+  if (!data.length) { el.innerHTML = '<p class="text-gray-500">No messages yet.</p>'; return; }
+  el.innerHTML = data.map(c => `
+    <div class="bg-white rounded-xl shadow p-5 ${c.read ? 'opacity-70' : 'border-l-4 border-purple-400'}">
+      <div class="flex justify-between items-start flex-wrap gap-2">
+        <div>
+          <p class="font-semibold text-gray-800">${c.name} ${c.read ? '' : '<span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-2">New</span>'}</p>
+          <p class="text-sm text-gray-500">${c.email} · ${c.phone}</p>
+          ${c.subject ? `<p class="text-sm text-blue-600 mt-1">${c.subject}</p>` : ''}
+          <p class="text-sm text-gray-700 mt-2">${c.message}</p>
+          <p class="text-xs text-gray-400 mt-1">${new Date(c.createdAt).toLocaleString()}</p>
+        </div>
+        <div class="flex gap-2">
+          ${!c.read ? `<button onclick="markRead('${c._id}')" class="text-sm text-blue-500 hover:text-blue-700">Mark Read</button>` : ''}
+          <button onclick="deleteContact('${c._id}')" class="text-sm text-red-400 hover:text-red-600">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function markRead(id) {
+  await fetch(`${API}/contact/${id}/read`, { method: 'PATCH', headers: authHeaders() });
+  loadContacts();
+}
+
+async function deleteContact(id) {
+  if (!confirm('Delete this message?')) return;
+  await fetch(`${API}/contact/${id}`, { method: 'DELETE', headers: authHeaders() });
+  loadContacts();
+}
+
+// ── GALLERY ──────────────────────────────────────────────────
+async function loadGallery(category) {
+  const url = category ? `${API}/gallery?category=${category}` : `${API}/gallery`;
+  const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token()}` } });
+  const data = await res.json();
+  const el = document.getElementById('gallery-grid');
+  if (!data.length) { el.innerHTML = '<p class="text-gray-500 col-span-4">No images yet.</p>'; return; }
+  el.innerHTML = data.map(img => `
+    <div class="relative group rounded-xl overflow-hidden shadow">
+      <img src="${img.url}" alt="${img.caption || ''}" class="w-full h-40 object-cover" />
+      <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition flex items-end">
+        <div class="p-2 w-full opacity-0 group-hover:opacity-100 transition flex justify-between items-center">
+          <span class="text-white text-xs">${img.category}</span>
+          <button onclick="deleteImage('${img._id}')" class="text-red-300 hover:text-red-500 text-xs bg-black bg-opacity-50 px-2 py-1 rounded">Delete</button>
+        </div>
+      </div>
+      ${img.caption ? `<p class="text-xs text-gray-500 p-1 truncate">${img.caption}</p>` : ''}
+    </div>
+  `).join('');
+}
+
+async function deleteImage(id) {
+  if (!confirm('Delete this image from Cloudinary?')) return;
+  await fetch(`${API}/gallery/${id}`, { method: 'DELETE', headers: authHeaders() });
+  loadGallery();
+}
+
+document.getElementById('upload-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msgEl = document.getElementById('upload-msg');
+  const formData = new FormData();
+  formData.append('image', document.getElementById('upload-file').files[0]);
+  formData.append('category', document.getElementById('upload-category').value);
+  formData.append('caption', document.getElementById('upload-caption').value);
+  msgEl.textContent = 'Uploading...';
+  msgEl.className = 'mt-3 text-sm text-blue-500';
+  msgEl.classList.remove('hidden');
+  try {
+    const res = await fetch(`${API}/gallery`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token()}` },
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) { msgEl.textContent = data.error; msgEl.className = 'mt-3 text-sm text-red-500'; return; }
+    msgEl.textContent = 'Uploaded successfully!';
+    msgEl.className = 'mt-3 text-sm text-green-600';
+    document.getElementById('upload-form').reset();
+    loadGallery();
+  } catch {
+    msgEl.textContent = 'Upload failed.';
+    msgEl.className = 'mt-3 text-sm text-red-500';
+  }
+});
+
+// Load enrolments on start
+loadEnrolments();
+</script>
+</body>
+</html>
