@@ -3,159 +3,304 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Portal – Little Wonders</title>
+  <title>Admin Portal – Little Wonders ELC</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    .tab-btn.active { background:#7c3aed; color:#fff; }
+    body { font-family: 'Inter', sans-serif; }
+    .sidebar { width: 260px; min-height: 100vh; background: linear-gradient(180deg, #1e1b4b 0%, #312e81 60%, #4c1d95 100%); }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:12px 20px; border-radius:10px; cursor:pointer; transition:all .2s; color:#c4b5fd; font-size:14px; font-weight:500; }
+    .nav-item:hover, .nav-item.active { background:rgba(255,255,255,0.15); color:#fff; }
+    .nav-item svg { width:18px; height:18px; flex-shrink:0; }
+    .stat-card { background:#fff; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+    .badge { display:inline-flex; align-items:center; padding:2px 10px; border-radius:999px; font-size:11px; font-weight:600; }
     .badge-new { background:#fef3c7; color:#92400e; }
     .badge-contacted { background:#dbeafe; color:#1e40af; }
     .badge-enrolled { background:#d1fae5; color:#065f46; }
     .badge-declined { background:#fee2e2; color:#991b1b; }
+    .badge-unread { background:#ede9fe; color:#5b21b6; }
+    .card { background:#fff; border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; }
+    .section { display:none; } .section.active { display:block; }
+    select { border:1px solid #e5e7eb; border-radius:8px; padding:4px 8px; font-size:13px; }
+    .btn-primary { background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-size:14px; font-weight:600; cursor:pointer; transition:opacity .2s; }
+    .btn-primary:hover { opacity:.9; }
+    .img-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:transform .2s; }
+    .img-card:hover { transform:translateY(-2px); }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-50 flex">
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-purple-700">Little Wonders Admin</h1>
-    <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500">Logout</button>
-  </nav>
-
-  <!-- Tabs -->
-  <div class="max-w-6xl mx-auto mt-6 px-4">
-    <div class="flex gap-2 mb-6 flex-wrap">
-      <button class="tab-btn active px-5 py-2 rounded-lg font-medium transition" onclick="showTab('enrolments', this)">Enrolments</button>
-      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('contacts', this)">Contact Messages</button>
-      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('gallery', this)">Gallery</button>
-      <button class="tab-btn px-5 py-2 rounded-lg font-medium bg-white transition" onclick="showTab('siteimages', this)">Site Images</button>
-    </div>
-
-    <!-- Enrolments Tab -->
-    <div id="tab-enrolments">
-      <div id="enrolments-list" class="space-y-4"></div>
-    </div>
-
-    <!-- Contacts Tab -->
-    <div id="tab-contacts" class="hidden">
-      <div id="contacts-list" class="space-y-4"></div>
-    </div>
-
-    <!-- Gallery Tab -->
-    <div id="tab-gallery" class="hidden">
-      <!-- Upload form -->
-      <div class="bg-white rounded-xl shadow p-6 mb-6">
-        <h2 class="font-semibold text-gray-700 mb-4">Upload Image</h2>
-        <form id="upload-form" class="flex flex-wrap gap-4 items-end">
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Category</label>
-            <select id="upload-category" class="border rounded-lg px-3 py-2 text-sm">
-              <option value="nursery">Nursery</option>
-              <option value="toddlers">Toddlers</option>
-              <option value="pre-kinder">Pre-Kinder</option>
-              <option value="kindergarten">Kindergarten</option>
-              <option value="kitchen">Kitchen</option>
-              <option value="bush-garden">Bush Garden</option>
-              <option value="general">General</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Caption</label>
-            <input type="text" id="upload-caption" placeholder="Optional caption" class="border rounded-lg px-3 py-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Image</label>
-            <input type="file" id="upload-file" accept="image/*" required class="text-sm" />
-          </div>
-          <button type="submit" class="bg-purple-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-purple-700">Upload</button>
-        </form>
-        <div id="upload-msg" class="mt-3 text-sm hidden"></div>
+<!-- Sidebar -->
+<aside class="sidebar fixed top-0 left-0 h-full z-20 flex flex-col">
+  <div class="p-6 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">👶</div>
+      <div>
+        <p class="text-white font-bold text-sm">Little Wonders</p>
+        <p class="text-purple-300 text-xs">Admin Portal</p>
       </div>
-      <!-- Filter -->
-      <div class="flex gap-2 mb-4 flex-wrap">
-        <button onclick="loadGallery()" class="px-3 py-1 bg-white rounded-lg text-sm shadow">All</button>
-        <button onclick="loadGallery('nursery')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Nursery</button>
-        <button onclick="loadGallery('toddlers')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Toddlers</button>
-        <button onclick="loadGallery('pre-kinder')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Pre-Kinder</button>
-        <button onclick="loadGallery('kindergarten')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Kindergarten</button>
-        <button onclick="loadGallery('kitchen')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Kitchen</button>
-        <button onclick="loadGallery('bush-garden')" class="px-3 py-1 bg-white rounded-lg text-sm shadow">Bush Garden</button>
-      </div>
-      <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    </div>
-
-    <!-- Site Images Tab -->
-    <div id="tab-siteimages" class="hidden">
-      <p class="text-sm text-gray-500 mb-4">These are all images currently used on the website. Upload a replacement to swap any image — the new image will be served from Cloudinary.</p>
-      <div id="site-images-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </div>
   </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <div class="nav-item active" onclick="showSection('dashboard',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="showSection('enrolments',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Enrolments <span id="nav-enrol-count" class="ml-auto bg-yellow-400 text-yellow-900 text-xs px-2 py-0.5 rounded-full hidden"></span>
+    </div>
+    <div class="nav-item" onclick="showSection('contacts',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Messages <span id="nav-msg-count" class="ml-auto bg-purple-400 text-white text-xs px-2 py-0.5 rounded-full hidden"></span>
+    </div>
+    <div class="nav-item" onclick="showSection('gallery',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      Gallery
+    </div>
+    <div class="nav-item" onclick="showSection('siteimages',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+      Site Images
+    </div>
+  </nav>
+  <div class="p-4 border-t border-white/10">
+    <button onclick="logout()" class="nav-item w-full text-red-300 hover:text-red-200 hover:bg-red-500/20">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-[260px] flex-1 p-8 min-h-screen">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 id="page-title" class="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <p class="text-gray-400 text-sm mt-1">Welcome back, Admin</p>
+    </div>
+    <div class="text-sm text-gray-400" id="current-time"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="section-dashboard" class="section active">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="stat-card border-l-4 border-yellow-400">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Total Enrolments</p>
+        <p id="stat-total-enrol" class="text-3xl font-bold text-gray-800">—</p>
+      </div>
+      <div class="stat-card border-l-4 border-green-400">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">New Enrolments</p>
+        <p id="stat-new-enrol" class="text-3xl font-bold text-gray-800">—</p>
+      </div>
+      <div class="stat-card border-l-4 border-purple-400">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Unread Messages</p>
+        <p id="stat-unread-msg" class="text-3xl font-bold text-gray-800">—</p>
+      </div>
+      <div class="stat-card border-l-4 border-blue-400">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Total Messages</p>
+        <p id="stat-total-msg" class="text-3xl font-bold text-gray-800">—</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card p-6">
+        <h2 class="font-semibold text-gray-700 mb-4">Recent Enrolments</h2>
+        <div id="dash-enrolments" class="space-y-3"></div>
+      </div>
+      <div class="card p-6">
+        <h2 class="font-semibold text-gray-700 mb-4">Recent Messages</h2>
+        <div id="dash-messages" class="space-y-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENROLMENTS -->
+  <div id="section-enrolments" class="section">
+    <div class="flex gap-3 mb-6 flex-wrap">
+      <button onclick="filterEnrolments('all')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-purple-400 transition">All</button>
+      <button onclick="filterEnrolments('new')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-yellow-400 transition">New</button>
+      <button onclick="filterEnrolments('contacted')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-blue-400 transition">Contacted</button>
+      <button onclick="filterEnrolments('enrolled')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-green-400 transition">Enrolled</button>
+      <button onclick="filterEnrolments('declined')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-red-400 transition">Declined</button>
+    </div>
+    <div id="enrolments-list" class="space-y-4"></div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div id="section-contacts" class="section">
+    <div class="flex gap-3 mb-6">
+      <button onclick="filterContacts('all')" class="px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-purple-400 transition">All</button>
+      <button onclick="filterContacts('unread')" class="px-4 py-2 rounded-lg text-sm font-medium bg-white shadow-sm border border-gray-200 hover:border-purple-400 transition">Unread</button>
+    </div>
+    <div id="contacts-list" class="space-y-4"></div>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="section-gallery" class="section">
+    <div class="card p-6 mb-6">
+      <h2 class="font-semibold text-gray-700 mb-4">Upload New Image</h2>
+      <form id="upload-form" class="flex flex-wrap gap-4 items-end">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1 font-medium">Category</label>
+          <select id="upload-category" class="border rounded-lg px-3 py-2 text-sm">
+            <option value="nursery">Nursery</option>
+            <option value="toddlers">Toddlers</option>
+            <option value="pre-kinder">Pre-Kinder</option>
+            <option value="kindergarten">Kindergarten</option>
+            <option value="kitchen">Kitchen</option>
+            <option value="bush-garden">Bush Garden</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1 font-medium">Caption</label>
+          <input type="text" id="upload-caption" placeholder="Optional caption" class="border rounded-lg px-3 py-2 text-sm w-48"/>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1 font-medium">Image</label>
+          <input type="file" id="upload-file" accept="image/*" required class="text-sm"/>
+        </div>
+        <button type="submit" class="btn-primary">Upload</button>
+      </form>
+      <div id="upload-msg" class="mt-3 text-sm hidden"></div>
+    </div>
+    <div class="flex gap-2 mb-4 flex-wrap">
+      <button onclick="loadGallery()" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">All</button>
+      <button onclick="loadGallery('nursery')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Nursery</button>
+      <button onclick="loadGallery('toddlers')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Toddlers</button>
+      <button onclick="loadGallery('pre-kinder')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Pre-Kinder</button>
+      <button onclick="loadGallery('kindergarten')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Kindergarten</button>
+      <button onclick="loadGallery('kitchen')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Kitchen</button>
+      <button onclick="loadGallery('bush-garden')" class="px-3 py-1.5 bg-white rounded-lg text-xs font-medium shadow-sm border border-gray-200 hover:border-purple-400 transition">Bush Garden</button>
+    </div>
+    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+  </div>
+
+  <!-- SITE IMAGES -->
+  <div id="section-siteimages" class="section">
+    <p class="text-sm text-gray-500 mb-6">All images currently used on the website. Click Replace to swap any image with a new one uploaded to Cloudinary.</p>
+    <div id="site-images-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+  </div>
+
+</main>
 
 <script>
 const API = 'https://little-wonders-api.onrender.com/api';
 const token = () => localStorage.getItem('lw_token');
-
-// Auth guard
 if (!token()) window.location.href = '/admin/login.html';
 
-function logout() {
-  localStorage.removeItem('lw_token');
-  window.location.href = '/admin/login.html';
-}
+// Clock
+setInterval(() => {
+  document.getElementById('current-time').textContent = new Date().toLocaleString('en-AU', { weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+}, 1000);
 
-function showTab(name, btn) {
-  ['enrolments','contacts','gallery','siteimages'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.add('hidden');
-  });
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'bg-white'));
-  document.getElementById(`tab-${name}`).classList.remove('hidden');
-  btn.classList.add('active');
+function logout() { localStorage.removeItem('lw_token'); window.location.href = '/admin/login.html'; }
+function authHeaders() { return { 'Authorization': `Bearer ${token()}`, 'Content-Type': 'application/json' }; }
+
+let allEnrolments = [], allContacts = [];
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function showSection(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`section-${name}`).classList.add('active');
+  el.classList.add('active');
+  const titles = { dashboard:'Dashboard', enrolments:'Enrolments', contacts:'Messages', gallery:'Gallery', siteimages:'Site Images' };
+  document.getElementById('page-title').textContent = titles[name];
+  if (name === 'dashboard') loadDashboard();
   if (name === 'enrolments') loadEnrolments();
   if (name === 'contacts') loadContacts();
   if (name === 'gallery') loadGallery();
   if (name === 'siteimages') loadSiteImages();
 }
 
-function authHeaders() {
-  return { 'Authorization': `Bearer ${token()}`, 'Content-Type': 'application/json' };
+// ── DASHBOARD ────────────────────────────────────────────────
+async function loadDashboard() {
+  const [eRes, cRes] = await Promise.all([
+    fetch(`${API}/enrolments`, { headers: authHeaders() }),
+    fetch(`${API}/contact`, { headers: authHeaders() })
+  ]);
+  if (eRes.status === 401 || cRes.status === 401) return logout();
+  const enrolments = await eRes.json();
+  const contacts = await cRes.json();
+
+  const newEnrol = enrolments.filter(e => e.status === 'new').length;
+  const unreadMsg = contacts.filter(c => !c.read).length;
+
+  document.getElementById('stat-total-enrol').textContent = enrolments.length;
+  document.getElementById('stat-new-enrol').textContent = newEnrol;
+  document.getElementById('stat-unread-msg').textContent = unreadMsg;
+  document.getElementById('stat-total-msg').textContent = contacts.length;
+
+  // Nav badges
+  if (newEnrol > 0) { const b = document.getElementById('nav-enrol-count'); b.textContent = newEnrol; b.classList.remove('hidden'); }
+  if (unreadMsg > 0) { const b = document.getElementById('nav-msg-count'); b.textContent = unreadMsg; b.classList.remove('hidden'); }
+
+  document.getElementById('dash-enrolments').innerHTML = enrolments.slice(0,5).map(e => `
+    <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+      <div>
+        <p class="text-sm font-medium text-gray-800">${e.childName} <span class="text-xs text-gray-400">(${e.program})</span></p>
+        <p class="text-xs text-gray-400">${e.parentName} · ${new Date(e.createdAt).toLocaleDateString('en-AU')}</p>
+      </div>
+      <span class="badge badge-${e.status}">${e.status}</span>
+    </div>`).join('') || '<p class="text-sm text-gray-400">No enrolments yet.</p>';
+
+  document.getElementById('dash-messages').innerHTML = contacts.slice(0,5).map(c => `
+    <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+      <div>
+        <p class="text-sm font-medium text-gray-800">${c.name} ${!c.read ? '<span class="badge badge-unread ml-1">New</span>' : ''}</p>
+        <p class="text-xs text-gray-400 truncate max-w-xs">${c.message}</p>
+      </div>
+      <p class="text-xs text-gray-400 ml-2 shrink-0">${new Date(c.createdAt).toLocaleDateString('en-AU')}</p>
+    </div>`).join('') || '<p class="text-sm text-gray-400">No messages yet.</p>';
 }
 
-// ── ENROLMENTS ──────────────────────────────────────────────
+// ── ENROLMENTS ───────────────────────────────────────────────
 async function loadEnrolments() {
   const res = await fetch(`${API}/enrolments`, { headers: authHeaders() });
   if (res.status === 401) return logout();
-  const data = await res.json();
+  allEnrolments = await res.json();
+  renderEnrolments(allEnrolments);
+}
+
+function filterEnrolments(status) {
+  const filtered = status === 'all' ? allEnrolments : allEnrolments.filter(e => e.status === status);
+  renderEnrolments(filtered);
+}
+
+function renderEnrolments(data) {
   const el = document.getElementById('enrolments-list');
-  if (!data.length) { el.innerHTML = '<p class="text-gray-500">No enrolments yet.</p>'; return; }
+  if (!data.length) { el.innerHTML = '<p class="text-gray-400 text-sm">No enrolments found.</p>'; return; }
   el.innerHTML = data.map(e => `
-    <div class="bg-white rounded-xl shadow p-5">
-      <div class="flex justify-between items-start flex-wrap gap-2">
-        <div>
-          <p class="font-semibold text-gray-800">${e.childName} <span class="text-sm text-gray-400">(${e.program})</span></p>
-          <p class="text-sm text-gray-500">DOB: ${new Date(e.childDob).toLocaleDateString()} · Start: ${new Date(e.startDate).toLocaleDateString()}</p>
-          <p class="text-sm text-gray-600 mt-1">Parent: ${e.parentName} · ${e.parentPhone} · ${e.parentEmail}</p>
-          ${e.message ? `<p class="text-sm text-gray-500 mt-1 italic">"${e.message}"</p>` : ''}
-          <p class="text-xs text-gray-400 mt-1">Submitted: ${new Date(e.createdAt).toLocaleString()}</p>
+    <div class="card p-5">
+      <div class="flex justify-between items-start flex-wrap gap-3">
+        <div class="flex gap-4 items-start">
+          <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm shrink-0">${e.childName.charAt(0)}</div>
+          <div>
+            <p class="font-semibold text-gray-800">${e.childName} <span class="text-xs text-gray-400 font-normal">(${e.program})</span></p>
+            <p class="text-xs text-gray-500 mt-0.5">DOB: ${new Date(e.childDob).toLocaleDateString('en-AU')} &nbsp;·&nbsp; Start: ${new Date(e.startDate).toLocaleDateString('en-AU')}</p>
+            <p class="text-xs text-gray-500 mt-0.5">👤 ${e.parentName} &nbsp;·&nbsp; 📞 ${e.parentPhone} &nbsp;·&nbsp; ✉️ ${e.parentEmail}</p>
+            ${e.message ? `<p class="text-xs text-gray-400 mt-1 italic">"${e.message}"</p>` : ''}
+            <p class="text-xs text-gray-300 mt-1">${new Date(e.createdAt).toLocaleString('en-AU')}</p>
+          </div>
         </div>
         <div class="flex gap-2 items-center">
-          <select onchange="updateStatus('${e._id}', this.value)" class="text-sm border rounded-lg px-2 py-1">
+          <select onchange="updateStatus('${e._id}', this.value)" class="text-xs border rounded-lg px-2 py-1.5 bg-gray-50">
             ${['new','contacted','enrolled','declined'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
           </select>
-          <button onclick="deleteEnrolment('${e._id}')" class="text-red-400 hover:text-red-600 text-sm">Delete</button>
+          <button onclick="deleteEnrolment('${e._id}')" class="text-xs text-red-400 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition">Delete</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 async function updateStatus(id, status) {
-  await fetch(`${API}/enrolments/${id}/status`, {
-    method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status })
-  });
+  await fetch(`${API}/enrolments/${id}/status`, { method:'PATCH', headers:authHeaders(), body:JSON.stringify({status}) });
 }
-
 async function deleteEnrolment(id) {
   if (!confirm('Delete this enrolment?')) return;
-  await fetch(`${API}/enrolments/${id}`, { method: 'DELETE', headers: authHeaders() });
+  await fetch(`${API}/enrolments/${id}`, { method:'DELETE', headers:authHeaders() });
   loadEnrolments();
 }
 
@@ -163,63 +308,79 @@ async function deleteEnrolment(id) {
 async function loadContacts() {
   const res = await fetch(`${API}/contact`, { headers: authHeaders() });
   if (res.status === 401) return logout();
-  const data = await res.json();
+  allContacts = await res.json();
+  renderContacts(allContacts);
+}
+
+function filterContacts(type) {
+  const filtered = type === 'unread' ? allContacts.filter(c => !c.read) : allContacts;
+  renderContacts(filtered);
+}
+
+function renderContacts(data) {
   const el = document.getElementById('contacts-list');
-  if (!data.length) { el.innerHTML = '<p class="text-gray-500">No messages yet.</p>'; return; }
+  if (!data.length) { el.innerHTML = '<p class="text-gray-400 text-sm">No messages found.</p>'; return; }
   el.innerHTML = data.map(c => `
-    <div class="bg-white rounded-xl shadow p-5 ${c.read ? 'opacity-70' : 'border-l-4 border-purple-400'}">
-      <div class="flex justify-between items-start flex-wrap gap-2">
-        <div>
-          <p class="font-semibold text-gray-800">${c.name} ${c.read ? '' : '<span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-2">New</span>'}</p>
-          <p class="text-sm text-gray-500">${c.email} · ${c.phone}</p>
-          ${c.subject ? `<p class="text-sm text-blue-600 mt-1">${c.subject}</p>` : ''}
-          <p class="text-sm text-gray-700 mt-2">${c.message}</p>
-          <p class="text-xs text-gray-400 mt-1">${new Date(c.createdAt).toLocaleString()}</p>
+    <div class="card p-5 ${!c.read ? 'border-l-4 border-purple-400' : ''}">
+      <div class="flex justify-between items-start flex-wrap gap-3">
+        <div class="flex gap-4 items-start">
+          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">${c.name.charAt(0)}</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="font-semibold text-gray-800">${c.name}</p>
+              ${!c.read ? '<span class="badge badge-unread">New</span>' : ''}
+              ${c.subject ? `<span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">${c.subject}</span>` : ''}
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">✉️ ${c.email} &nbsp;·&nbsp; 📞 ${c.phone}</p>
+            <p class="text-sm text-gray-700 mt-2 leading-relaxed">${c.message}</p>
+            <p class="text-xs text-gray-300 mt-1">${new Date(c.createdAt).toLocaleString('en-AU')}</p>
+          </div>
         </div>
-        <div class="flex gap-2">
-          ${!c.read ? `<button onclick="markRead('${c._id}')" class="text-sm text-blue-500 hover:text-blue-700">Mark Read</button>` : ''}
-          <button onclick="deleteContact('${c._id}')" class="text-sm text-red-400 hover:text-red-600">Delete</button>
+        <div class="flex gap-2 shrink-0">
+          ${!c.read ? `<button onclick="markRead('${c._id}')" class="text-xs text-blue-500 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition border border-blue-200">Mark Read</button>` : ''}
+          <button onclick="deleteContact('${c._id}')" class="text-xs text-red-400 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 transition border border-red-200">Delete</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 async function markRead(id) {
-  await fetch(`${API}/contact/${id}/read`, { method: 'PATCH', headers: authHeaders() });
+  await fetch(`${API}/contact/${id}/read`, { method:'PATCH', headers:authHeaders() });
   loadContacts();
 }
-
 async function deleteContact(id) {
   if (!confirm('Delete this message?')) return;
-  await fetch(`${API}/contact/${id}`, { method: 'DELETE', headers: authHeaders() });
+  await fetch(`${API}/contact/${id}`, { method:'DELETE', headers:authHeaders() });
   loadContacts();
 }
+</script>
 
+<script>
 // ── GALLERY ──────────────────────────────────────────────────
 async function loadGallery(category) {
   const url = category ? `${API}/gallery?category=${category}` : `${API}/gallery`;
   const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token()}` } });
   const data = await res.json();
   const el = document.getElementById('gallery-grid');
-  if (!data.length) { el.innerHTML = '<p class="text-gray-500 col-span-4">No images yet.</p>'; return; }
+  if (!data.length) { el.innerHTML = '<p class="text-gray-400 text-sm col-span-4">No images yet.</p>'; return; }
   el.innerHTML = data.map(img => `
-    <div class="relative group rounded-xl overflow-hidden shadow">
-      <img src="${img.url}" alt="${img.caption || ''}" class="w-full h-40 object-cover" />
-      <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition flex items-end">
-        <div class="p-2 w-full opacity-0 group-hover:opacity-100 transition flex justify-between items-center">
-          <span class="text-white text-xs">${img.category}</span>
-          <button onclick="deleteImage('${img._id}')" class="text-red-300 hover:text-red-500 text-xs bg-black bg-opacity-50 px-2 py-1 rounded">Delete</button>
+    <div class="img-card">
+      <div class="relative group">
+        <img src="${img.url}" alt="${img.caption||''}" class="w-full h-40 object-cover"/>
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <button onclick="deleteImage('${img._id}')" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-lg">Delete</button>
         </div>
       </div>
-      ${img.caption ? `<p class="text-xs text-gray-500 p-1 truncate">${img.caption}</p>` : ''}
-    </div>
-  `).join('');
+      <div class="p-2">
+        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">${img.category}</span>
+        ${img.caption ? `<p class="text-xs text-gray-500 mt-1 truncate">${img.caption}</p>` : ''}
+      </div>
+    </div>`).join('');
 }
 
 async function deleteImage(id) {
   if (!confirm('Delete this image from Cloudinary?')) return;
-  await fetch(`${API}/gallery/${id}`, { method: 'DELETE', headers: authHeaders() });
+  await fetch(`${API}/gallery/${id}`, { method:'DELETE', headers:authHeaders() });
   loadGallery();
 }
 
@@ -234,21 +395,14 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
   msgEl.className = 'mt-3 text-sm text-blue-500';
   msgEl.classList.remove('hidden');
   try {
-    const res = await fetch(`${API}/gallery`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token()}` },
-      body: formData
-    });
+    const res = await fetch(`${API}/gallery`, { method:'POST', headers:{ 'Authorization':`Bearer ${token()}` }, body:formData });
     const data = await res.json();
     if (!res.ok) { msgEl.textContent = data.error; msgEl.className = 'mt-3 text-sm text-red-500'; return; }
     msgEl.textContent = 'Uploaded successfully!';
     msgEl.className = 'mt-3 text-sm text-green-600';
     document.getElementById('upload-form').reset();
     loadGallery();
-  } catch {
-    msgEl.textContent = 'Upload failed.';
-    msgEl.className = 'mt-3 text-sm text-red-500';
-  }
+  } catch { msgEl.textContent = 'Upload failed.'; msgEl.className = 'mt-3 text-sm text-red-500'; }
 });
 
 // ── SITE IMAGES ──────────────────────────────────────────────
@@ -258,22 +412,20 @@ async function loadSiteImages() {
   const data = await res.json();
   const el = document.getElementById('site-images-grid');
   el.innerHTML = data.map(img => `
-    <div class="bg-white rounded-xl shadow overflow-hidden" id="si-${img.filename.replace(/[^a-z0-9]/gi,'_')}">
+    <div class="img-card" id="si-${img.filename.replace(/[^a-z0-9]/gi,'_')}">
       <div class="relative">
-        <img src="${img.cloudinaryUrl || img.originalUrl}" alt="${img.filename}"
-          class="w-full h-36 object-cover" onerror="this.src='${img.originalUrl}'" />
-        ${img.cloudinaryUrl ? '<span class="absolute top-1 right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Replaced</span>' : ''}
+        <img src="${img.cloudinaryUrl || img.originalUrl}" alt="${img.filename}" class="w-full h-36 object-cover" onerror="this.src='${img.originalUrl}'"/>
+        ${img.cloudinaryUrl ? '<span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">✓ Replaced</span>' : ''}
       </div>
-      <div class="p-2">
-        <p class="text-xs text-gray-500 truncate mb-2">${img.filename}</p>
-        <label class="block w-full cursor-pointer bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs text-center py-1.5 rounded-lg transition">
-          Replace
-          <input type="file" accept="image/*" class="hidden" onchange="replaceSiteImage('${img.filename}', this)" />
+      <div class="p-3">
+        <p class="text-xs text-gray-500 truncate mb-2 font-medium">${img.filename}</p>
+        <label class="block w-full cursor-pointer bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs text-center py-2 rounded-lg transition font-medium">
+          Replace Image
+          <input type="file" accept="image/*" class="hidden" onchange="replaceSiteImage('${img.filename}', this)"/>
         </label>
-        ${img.cloudinaryUrl ? `<button onclick="revertSiteImage('${img.filename}')" class="mt-1 w-full text-xs text-red-400 hover:text-red-600 py-1">Revert to original</button>` : ''}
+        ${img.cloudinaryUrl ? `<button onclick="revertSiteImage('${img.filename}')" class="mt-1.5 w-full text-xs text-red-400 hover:text-red-600 py-1 transition">↩ Revert to original</button>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 async function replaceSiteImage(filename, input) {
@@ -284,11 +436,7 @@ async function replaceSiteImage(filename, input) {
   const card = document.getElementById(`si-${safeId}`);
   card.style.opacity = '0.5';
   try {
-    const res = await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token()}` },
-      body: formData
-    });
+    const res = await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, { method:'POST', headers:{ 'Authorization':`Bearer ${token()}` }, body:formData });
     if (res.ok) loadSiteImages();
     else { const d = await res.json(); alert(d.error); card.style.opacity = '1'; }
   } catch { alert('Upload failed'); card.style.opacity = '1'; }
@@ -296,14 +444,12 @@ async function replaceSiteImage(filename, input) {
 
 async function revertSiteImage(filename) {
   if (!confirm('Revert to original image?')) return;
-  await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, {
-    method: 'DELETE', headers: authHeaders()
-  });
+  await fetch(`${API}/site-images/${encodeURIComponent(filename)}`, { method:'DELETE', headers:authHeaders() });
   loadSiteImages();
 }
 
-// Load enrolments on start
-loadEnrolments();
+// Load dashboard on start
+loadDashboard();
 </script>
 </body>
 </html>
