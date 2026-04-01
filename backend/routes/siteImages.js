@@ -37,6 +37,8 @@ const STATIC_IMAGES = [
   "view.webp","vvv.webp"
 ];
 
+const FRONTEND_BASE = 'https://www.littlewonderselc.com.au';
+
 // GET /api/site-images — returns all static images with replacement info
 router.get('/', auth, async (req, res) => {
   try {
@@ -46,7 +48,7 @@ router.get('/', auth, async (req, res) => {
 
     const images = STATIC_IMAGES.map(filename => ({
       filename,
-      originalUrl: `/images1/${filename}`,
+      originalUrl: `${FRONTEND_BASE}/images1/${filename}`,
       cloudinaryUrl: replacementMap[filename]?.cloudinaryUrl || null,
       replacedAt: replacementMap[filename]?.replacedAt || null
     }));
@@ -73,7 +75,7 @@ router.post('/:filename', auth, upload.single('image'), async (req, res) => {
       { filename },
       {
         filename,
-        originalUrl: `/images1/${filename}`,
+        originalUrl: `${FRONTEND_BASE}/images1/${filename}`,
         cloudinaryUrl: req.file.path,
         cloudinaryId: req.file.filename,
         replacedAt: new Date()
