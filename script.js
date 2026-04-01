@@ -211,24 +211,6 @@ scrollToTopBtn.addEventListener('mouseleave', function() {
     this.style.transform = 'scale(1) translateY(0)';
 });
 
-// Add loading animation to buttons
-const allButtons = document.querySelectorAll('button[type="submit"]');
-allButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-        if (this.closest('form').checkValidity()) {
-            this.innerHTML = '<span>Sending...</span>';
-            this.disabled = true;
-            
-            setTimeout(() => {
-                this.disabled = false;
-                this.innerHTML = this.dataset.originalText || 'Send Enquiry';
-            }, 2000);
-        }
-    });
-    
-    button.dataset.originalText = button.innerHTML;
-});
-
 // Navbar scroll effect
 let lastScroll = 0;
 const navbar = document.getElementById('navbar');
