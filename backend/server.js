@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const app = express();
@@ -13,7 +12,9 @@ app.use(cors({
     process.env.FRONTEND_URL,
     'https://littlewonderselc.com.au',
     'https://www.littlewonderselc.com.au',
-    'https://littlewonders-tau.vercel.app'
+    'https://littlewonders-tau.vercel.app',
+    'http://localhost:5000',
+    'http://localhost:3000'
   ],
   credentials: true
 }));
@@ -22,19 +23,12 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting for form submissions
-const formLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  message: { error: 'Too many submissions, please try again later.' }
-});
-
 // Serve admin portal static files
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // Routes
-app.use('/api/contact', formLimiter, require('./routes/contact'));
-app.use('/api/enrolments', formLimiter, require('./routes/enrolments'));
+app.use('/api/contact', require('./routes/contact'));
+app.use('/api/enrolments', require('./routes/enrolments'));
 app.use('/api/gallery', require('./routes/gallery'));
 app.use('/api/auth', require('./routes/auth'));
 
