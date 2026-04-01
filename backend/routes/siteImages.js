@@ -37,7 +37,7 @@ const STATIC_IMAGES = [
   "view.webp","vvv.webp"
 ];
 
-const FRONTEND_BASE = 'https://www.littlewonderselc.com.au';
+const FRONTEND_BASE = process.env.FRONTEND_URL || 'https://www.littlewonderselc.com.au';
 
 // GET /api/site-images — returns all static images with replacement info
 router.get('/', auth, async (req, res) => {
