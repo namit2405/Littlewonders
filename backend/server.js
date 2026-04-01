@@ -9,7 +9,12 @@ const app = express();
 
 // CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: [
+    process.env.FRONTEND_URL,
+    'https://littlewonderselc.com.au',
+    'https://www.littlewonderselc.com.au',
+    'https://littlewonders-tau.vercel.app'
+  ],
   credentials: true
 }));
 
