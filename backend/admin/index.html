@@ -26,6 +26,11 @@
     .btn-primary:hover { opacity:.9; }
     .img-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:transform .2s; }
     .img-card:hover { transform:translateY(-2px); }
+    #detail-modal.open { display:flex; }
+    .detail-row { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #f3f4f6; }
+    .detail-row:last-child { border:none; }
+    .detail-label { font-size:12px; color:#9ca3af; font-weight:500; width:120px; shrink:0; padding-top:1px; }
+    .detail-value { font-size:14px; color:#1f2937; font-weight:400; flex:1; }
   </style>
 </head>
 <body class="bg-gray-50 flex">
@@ -34,7 +39,7 @@
 <aside class="sidebar fixed top-0 left-0 h-full z-20 flex flex-col">
   <div class="p-6 border-b border-white/10">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">👶</div>
+      <img src="https://www.littlewonderselc.com.au/images1/logo2.png" alt="Little Wonders" class="w-10 h-10 rounded-xl object-contain bg-white/10 p-1"/>
       <div>
         <p class="text-white font-bold text-sm">Little Wonders</p>
         <p class="text-purple-300 text-xs">Admin Portal</p>
@@ -185,6 +190,17 @@
 
 </main>
 
+<!-- Detail Modal -->
+<div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between p-6 border-b">
+      <h3 id="modal-title" class="text-lg font-bold text-gray-800"></h3>
+      <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+    <div id="modal-body" class="p-6"></div>
+  </div>
+</div>
+
 <script>
 const API = 'https://little-wonders-api.onrender.com/api';
 const token = () => localStorage.getItem('lw_token');
@@ -273,19 +289,18 @@ function renderEnrolments(data) {
   const el = document.getElementById('enrolments-list');
   if (!data.length) { el.innerHTML = '<p class="text-gray-400 text-sm">No enrolments found.</p>'; return; }
   el.innerHTML = data.map(e => `
-    <div class="card p-5">
+    <div class="card p-5 cursor-pointer hover:shadow-md transition" onclick="openEnrolment(${JSON.stringify(e).replace(/"/g,'&quot;')})">
       <div class="flex justify-between items-start flex-wrap gap-3">
         <div class="flex gap-4 items-start">
           <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm shrink-0">${e.childName.charAt(0)}</div>
           <div>
             <p class="font-semibold text-gray-800">${e.childName} <span class="text-xs text-gray-400 font-normal">(${e.program})</span></p>
             <p class="text-xs text-gray-500 mt-0.5">DOB: ${new Date(e.childDob).toLocaleDateString('en-AU')} &nbsp;·&nbsp; Start: ${new Date(e.startDate).toLocaleDateString('en-AU')}</p>
-            <p class="text-xs text-gray-500 mt-0.5">👤 ${e.parentName} &nbsp;·&nbsp; 📞 ${e.parentPhone} &nbsp;·&nbsp; ✉️ ${e.parentEmail}</p>
-            ${e.message ? `<p class="text-xs text-gray-400 mt-1 italic">"${e.message}"</p>` : ''}
+            <p class="text-xs text-gray-500 mt-0.5">👤 ${e.parentName} &nbsp;·&nbsp; 📞 ${e.parentPhone}</p>
             <p class="text-xs text-gray-300 mt-1">${new Date(e.createdAt).toLocaleString('en-AU')}</p>
           </div>
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex gap-2 items-center" onclick="event.stopPropagation()">
           <select onchange="updateStatus('${e._id}', this.value)" class="text-xs border rounded-lg px-2 py-1.5 bg-gray-50">
             ${['new','contacted','enrolled','declined'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
           </select>
@@ -293,6 +308,35 @@ function renderEnrolments(data) {
         </div>
       </div>
     </div>`).join('');
+}
+
+function openEnrolment(e) {
+  document.getElementById('modal-title').textContent = `Enrolment — ${e.childName}`;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xl">${e.childName.charAt(0)}</div>
+      <div>
+        <p class="text-lg font-bold text-gray-800">${e.childName}</p>
+        <span class="badge badge-${e.status} mt-1">${e.status}</span>
+      </div>
+    </div>
+    <div>
+      <div class="detail-row"><span class="detail-label">Program</span><span class="detail-value capitalize">${e.program}</span></div>
+      <div class="detail-row"><span class="detail-label">Date of Birth</span><span class="detail-value">${new Date(e.childDob).toLocaleDateString('en-AU')}</span></div>
+      <div class="detail-row"><span class="detail-label">Start Date</span><span class="detail-value">${new Date(e.startDate).toLocaleDateString('en-AU')}</span></div>
+      <div class="detail-row"><span class="detail-label">Parent/Guardian</span><span class="detail-value">${e.parentName}</span></div>
+      <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value"><a href="tel:${e.parentPhone}" class="text-purple-600 hover:underline">${e.parentPhone}</a></span></div>
+      <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value"><a href="mailto:${e.parentEmail}" class="text-purple-600 hover:underline">${e.parentEmail}</a></span></div>
+      ${e.message ? `<div class="detail-row"><span class="detail-label">Notes</span><span class="detail-value italic text-gray-500">${e.message}</span></div>` : ''}
+      <div class="detail-row"><span class="detail-label">Submitted</span><span class="detail-value">${new Date(e.createdAt).toLocaleString('en-AU')}</span></div>
+    </div>
+    <div class="mt-6 flex gap-3">
+      <select onchange="updateStatus('${e._id}', this.value); closeModal();" class="flex-1 border rounded-lg px-3 py-2 text-sm">
+        ${['new','contacted','enrolled','declined'].map(s => `<option value="${s}" ${e.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+      </select>
+      <a href="mailto:${e.parentEmail}" class="btn-primary text-sm no-underline">Reply via Email</a>
+    </div>`;
+  document.getElementById('detail-modal').classList.add('open');
 }
 
 async function updateStatus(id, status) {
@@ -321,28 +365,64 @@ function renderContacts(data) {
   const el = document.getElementById('contacts-list');
   if (!data.length) { el.innerHTML = '<p class="text-gray-400 text-sm">No messages found.</p>'; return; }
   el.innerHTML = data.map(c => `
-    <div class="card p-5 ${!c.read ? 'border-l-4 border-purple-400' : ''}">
+    <div class="card p-5 cursor-pointer hover:shadow-md transition ${!c.read ? 'border-l-4 border-purple-400' : ''}" onclick="openContact(${JSON.stringify(c).replace(/"/g,'&quot;')})">
       <div class="flex justify-between items-start flex-wrap gap-3">
         <div class="flex gap-4 items-start">
           <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">${c.name.charAt(0)}</div>
           <div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <p class="font-semibold text-gray-800">${c.name}</p>
               ${!c.read ? '<span class="badge badge-unread">New</span>' : ''}
               ${c.subject ? `<span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">${c.subject}</span>` : ''}
             </div>
-            <p class="text-xs text-gray-500 mt-0.5">✉️ ${c.email} &nbsp;·&nbsp; 📞 ${c.phone}</p>
-            <p class="text-sm text-gray-700 mt-2 leading-relaxed">${c.message}</p>
+            <p class="text-xs text-gray-500 mt-0.5">${c.email} &nbsp;·&nbsp; ${c.phone}</p>
+            <p class="text-sm text-gray-600 mt-1 line-clamp-2">${c.message}</p>
             <p class="text-xs text-gray-300 mt-1">${new Date(c.createdAt).toLocaleString('en-AU')}</p>
           </div>
         </div>
-        <div class="flex gap-2 shrink-0">
+        <div class="flex gap-2 shrink-0" onclick="event.stopPropagation()">
           ${!c.read ? `<button onclick="markRead('${c._id}')" class="text-xs text-blue-500 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition border border-blue-200">Mark Read</button>` : ''}
           <button onclick="deleteContact('${c._id}')" class="text-xs text-red-400 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 transition border border-red-200">Delete</button>
         </div>
       </div>
     </div>`).join('');
 }
+
+function openContact(c) {
+  document.getElementById('modal-title').textContent = `Message from ${c.name}`;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">${c.name.charAt(0)}</div>
+      <div>
+        <p class="text-lg font-bold text-gray-800">${c.name}</p>
+        ${!c.read ? '<span class="badge badge-unread mt-1">Unread</span>' : '<span class="text-xs text-gray-400">Read</span>'}
+      </div>
+    </div>
+    <div>
+      <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value"><a href="mailto:${c.email}" class="text-purple-600 hover:underline">${c.email}</a></span></div>
+      <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value"><a href="tel:${c.phone}" class="text-purple-600 hover:underline">${c.phone}</a></span></div>
+      ${c.subject ? `<div class="detail-row"><span class="detail-label">Subject</span><span class="detail-value">${c.subject}</span></div>` : ''}
+      <div class="detail-row"><span class="detail-label">Received</span><span class="detail-value">${new Date(c.createdAt).toLocaleString('en-AU')}</span></div>
+    </div>
+    <div class="mt-4 bg-gray-50 rounded-xl p-4">
+      <p class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Message</p>
+      <p class="text-gray-700 text-sm leading-relaxed">${c.message}</p>
+    </div>
+    <div class="mt-6 flex gap-3">
+      ${!c.read ? `<button onclick="markRead('${c._id}'); closeModal();" class="flex-1 border border-blue-200 text-blue-600 rounded-lg py-2 text-sm hover:bg-blue-50 transition">Mark as Read</button>` : ''}
+      <a href="mailto:${c.email}?subject=Re: ${c.subject||'Your Enquiry'}" class="btn-primary text-sm flex-1 text-center no-underline py-2">Reply via Email</a>
+    </div>`;
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('detail-modal').classList.remove('open');
+}
+
+// Close modal on backdrop click
+document.getElementById('detail-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
 
 async function markRead(id) {
   await fetch(`${API}/contact/${id}/read`, { method:'PATCH', headers:authHeaders() });
