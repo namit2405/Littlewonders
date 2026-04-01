@@ -20,6 +20,8 @@
 .b-new{background:#fef3c7;color:#92400e;} .b-contacted{background:#dbeafe;color:#1e40af;} .b-enrolled{background:#d1fae5;color:#065f46;} .b-declined{background:#fee2e2;color:#991b1b;} .b-unread{background:#ede9fe;color:#5b21b6;}
 #modal-wrap { display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.5); align-items:center; justify-content:center; padding:16px; }
 #modal-wrap.show { display:flex; }
+#dialog-wrap { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.5); align-items:center; justify-content:center; padding:16px; }
+#dialog-wrap.show { display:flex; }
 .detail-row { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid #f3f4f6; }
 .detail-row:last-child { border:none; }
 .dl { font-size:12px; color:#9ca3af; font-weight:500; width:110px; flex-shrink:0; }
@@ -177,13 +179,92 @@
   </div>
 </div>
 
+<!-- Universal Dialog -->
+<div id="dialog-wrap">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
+    <div id="dialog-icon" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"></div>
+    <h3 id="dialog-title" class="text-lg font-bold text-gray-800 mb-2"></h3>
+    <p id="dialog-msg" class="text-sm text-gray-500 mb-6"></p>
+    <div class="flex gap-3">
+      <button id="dialog-cancel" class="flex-1 border border-gray-200 text-gray-600 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-50 transition">Cancel</button>
+      <button id="dialog-confirm" class="flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition"></button>
+    </div>
+  </div>
+</div>
+
 <script>
-const API = 'https://backend.littlewonderselc.com.au/api';
-const token = () => localStorage.getItem('lw_token');
+const API = 'https://backend.littlewonderselc.com.au/api';const token = () => localStorage.getItem('lw_token');
 if (!token()) window.location.href = '/admin/login.html';
 
 // Clock
 setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleString('en-AU',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }, 1000);
+
+// ── UNIVERSAL DIALOG ─────────────────────────────────────────
+function showDialog({ title, message, confirmText = 'Confirm', type = 'danger' }) {
+  return new Promise(resolve => {
+    const wrap = document.getElementById('dialog-wrap');
+    const icon = document.getElementById('dialog-icon');
+    const confirmBtn = document.getElementById('dialog-confirm');
+
+    const styles = {
+      danger:  { bg:'bg-red-100',   icon:'text-red-500',   btn:'bg-red-500 hover:bg-red-600',   svg:'M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z' },
+      warning: { bg:'bg-yellow-100',icon:'text-yellow-500',btn:'bg-yellow-500 hover:bg-yellow-600',svg:'M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z' },
+      info:    { bg:'bg-blue-100',  icon:'text-blue-500',  btn:'bg-blue-500 hover:bg-blue-600',  svg:'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+      success: { bg:'bg-green-100', icon:'text-green-500', btn:'bg-green-500 hover:bg-green-600',svg:'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    };
+    const s = styles[type] || styles.danger;
+
+    icon.className = `w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 ${s.bg}`;
+    icon.innerHTML = `<svg class="w-7 h-7 ${s.icon}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${s.svg}"/></svg>`;
+    document.getElementById('dialog-title').textContent = title;
+    document.getElementById('dialog-msg').textContent = message;
+    confirmBtn.className = `flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition ${s.btn}`;
+    confirmBtn.textContent = confirmText;
+
+    wrap.classList.add('show');
+
+    const onConfirm = () => { cleanup(); resolve(true); };
+    const onCancel  = () => { cleanup(); resolve(false); };
+    function cleanup() {
+      wrap.classList.remove('show');
+      confirmBtn.removeEventListener('click', onConfirm);
+      document.getElementById('dialog-cancel').removeEventListener('click', onCancel);
+    }
+    confirmBtn.addEventListener('click', onConfirm);
+    document.getElementById('dialog-cancel').addEventListener('click', onCancel);
+  });
+}
+
+function showAlert(title, message, type = 'info') {
+  return new Promise(resolve => {
+    const wrap = document.getElementById('dialog-wrap');
+    const icon = document.getElementById('dialog-icon');
+    const confirmBtn = document.getElementById('dialog-confirm');
+    const cancelBtn = document.getElementById('dialog-cancel');
+
+    const styles = {
+      danger:  { bg:'bg-red-100',   icon:'text-red-500',   btn:'bg-red-500 hover:bg-red-600' },
+      info:    { bg:'bg-blue-100',  icon:'text-blue-500',  btn:'bg-blue-500 hover:bg-blue-600' },
+      success: { bg:'bg-green-100', icon:'text-green-500', btn:'bg-green-500 hover:bg-green-600' },
+    };
+    const s = styles[type] || styles.info;
+    const svgPath = type === 'success'
+      ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+      : 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z';
+
+    icon.className = `w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 ${s.bg}`;
+    icon.innerHTML = `<svg class="w-7 h-7 ${s.icon}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${svgPath}"/></svg>`;
+    document.getElementById('dialog-title').textContent = title;
+    document.getElementById('dialog-msg').textContent = message;
+    confirmBtn.className = `flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition ${s.btn}`;
+    confirmBtn.textContent = 'OK';
+    cancelBtn.classList.add('hidden');
+
+    wrap.classList.add('show');
+    const onOk = () => { wrap.classList.remove('show'); cancelBtn.classList.remove('hidden'); confirmBtn.removeEventListener('click', onOk); resolve(); };
+    confirmBtn.addEventListener('click', onOk);
+  });
+}
 
 // Sidebar
 document.getElementById('hamburger').onclick = () => {
@@ -301,7 +382,7 @@ function openE(e) {
   document.getElementById('modal-wrap').classList.add('show');
 }
 async function updE(id,status){ await fetch(`${API}/enrolments/${id}/status`,{method:'PATCH',headers:ah(),body:JSON.stringify({status})}); loadEnrolments(); }
-async function delE(id){ if(!confirm('Delete?'))return; await fetch(`${API}/enrolments/${id}`,{method:'DELETE',headers:ah()}); loadEnrolments(); }
+async function delE(id){ if(!await showDialog({title:'Delete Enrolment',message:'This will permanently remove this enrolment. Are you sure?',confirmText:'Delete',type:'danger'}))return; await fetch(`${API}/enrolments/${id}`,{method:'DELETE',headers:ah()}); loadEnrolments(); }
 
 async function loadContacts() {
   const r = await fetch(`${API}/contact`,{headers:ah()});
@@ -353,7 +434,7 @@ function openC(c) {
   document.getElementById('modal-wrap').classList.add('show');
 }
 async function markRead(id){ await fetch(`${API}/contact/${id}/read`,{method:'PATCH',headers:ah()}); loadContacts(); }
-async function delC(id){ if(!confirm('Delete?'))return; await fetch(`${API}/contact/${id}`,{method:'DELETE',headers:ah()}); loadContacts(); }
+async function delC(id){ if(!await showDialog({title:'Delete Message',message:'This will permanently remove this message. Are you sure?',confirmText:'Delete',type:'danger'}))return; await fetch(`${API}/contact/${id}`,{method:'DELETE',headers:ah()}); loadContacts(); }
 
 async function loadGallery(cat) {
   const r = await fetch(cat?`${API}/gallery?category=${cat}`:`${API}/gallery`,{headers:{'Authorization':`Bearer ${token()}`}});
@@ -370,7 +451,7 @@ async function loadGallery(cat) {
       <div class="p-2"><span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">${img.category}</span></div>
     </div>`).join('');
 }
-async function delImg(id){ if(!confirm('Delete?'))return; await fetch(`${API}/gallery/${id}`,{method:'DELETE',headers:ah()}); loadGallery(); }
+async function delImg(id){ if(!await showDialog({title:'Delete Image',message:'This will permanently remove the image from Cloudinary.',confirmText:'Delete',type:'danger'}))return; await fetch(`${API}/gallery/${id}`,{method:'DELETE',headers:ah()}); loadGallery(); }
 document.getElementById('upload-form').addEventListener('submit', async e => {
   e.preventDefault();
   const fd = new FormData();
@@ -381,8 +462,8 @@ document.getElementById('upload-form').addEventListener('submit', async e => {
   msg.textContent='Uploading...'; msg.className='mt-2 text-sm text-blue-500'; msg.classList.remove('hidden');
   const r = await fetch(`${API}/gallery`,{method:'POST',headers:{'Authorization':`Bearer ${token()}`},body:fd});
   const d = await r.json();
-  if(r.ok){msg.textContent='Uploaded!';msg.className='mt-2 text-sm text-green-600';document.getElementById('upload-form').reset();loadGallery();}
-  else{msg.textContent=d.error;msg.className='mt-2 text-sm text-red-500';}
+  if(r.ok){await showAlert('Uploaded!','Image uploaded successfully.','success');document.getElementById('upload-form').reset();loadGallery();}
+  else{await showAlert('Upload Failed',d.error,'danger');}
 });
 
 async function loadSiteImages() {
@@ -409,10 +490,10 @@ async function replaceImg(fn, input) {
   const id = fn.replace(/[^a-z0-9]/gi,'_');
   document.getElementById(`si-${id}`).style.opacity='0.5';
   const r = await fetch(`${API}/site-images/${encodeURIComponent(fn)}`,{method:'POST',headers:{'Authorization':`Bearer ${token()}`},body:fd});
-  if(r.ok) loadSiteImages(); else { const d=await r.json(); alert(d.error); document.getElementById(`si-${id}`).style.opacity='1'; }
+  if(r.ok) loadSiteImages(); else { const d=await r.json(); await showAlert('Upload Failed',d.error,'danger'); document.getElementById(`si-${id}`).style.opacity='1'; }
 }
 async function revertImg(fn) {
-  if(!confirm('Revert to original?')) return;
+  if(!await showDialog({title:'Revert Image',message:'This will remove the Cloudinary replacement and restore the original image.',confirmText:'Revert',type:'warning'})) return;
   await fetch(`${API}/site-images/${encodeURIComponent(fn)}`,{method:'DELETE',headers:ah()});
   loadSiteImages();
 }
