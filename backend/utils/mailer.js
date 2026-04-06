@@ -1,26 +1,16 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.office365.com',
-  port: parseInt(process.env.SMTP_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const NOTIFY_EMAIL = 'ballarat@littlewonderselc.com.au';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@littlewonderselc.com.au';
 
 async function sendEnrolmentEmail(data) {
   const { childName, childDob, program, startDate, parentName, parentPhone, parentEmail, message } = data;
-  console.log(`[Mailer] Attempting enrolment email | host: ${process.env.SMTP_HOST} | port: ${process.env.SMTP_PORT} | user: ${process.env.SMTP_USER}`);
+  console.log(`[Mailer] Sending enrolment email for ${childName}`);
   try {
-    const info = await transporter.sendMail({
-      from: `"Little Wonders Website" <${process.env.SMTP_USER}>`,
+    const { data: result, error } = await resend.emails.send({
+      from: `Little Wonders Website <${FROM_EMAIL}>`,
       to: NOTIFY_EMAIL,
       subject: `New Enrolment Enquiry - ${childName}`,
       html: `
@@ -37,19 +27,20 @@ async function sendEnrolmentEmail(data) {
         </table>
       `,
     });
-    console.log(`[Mailer] Enrolment email sent: ${info.messageId}`);
+    if (error) throw new Error(error.message);
+    console.log(`[Mailer] Enrolment email sent: ${result.id}`);
   } catch (err) {
-    console.error(`[Mailer] Enrolment email FAILED:`, err.message, err.code);
+    console.error(`[Mailer] Enrolment email FAILED:`, err.message);
     throw err;
   }
 }
 
 async function sendContactEmail(data) {
   const { name, phone, email, subject, message } = data;
-  console.log(`[Mailer] Attempting contact email | host: ${process.env.SMTP_HOST} | port: ${process.env.SMTP_PORT} | user: ${process.env.SMTP_USER}`);
+  console.log(`[Mailer] Sending contact email from ${name}`);
   try {
-    const info = await transporter.sendMail({
-      from: `"Little Wonders Website" <${process.env.SMTP_USER}>`,
+    const { data: result, error } = await resend.emails.send({
+      from: `Little Wonders Website <${FROM_EMAIL}>`,
       to: NOTIFY_EMAIL,
       subject: `New Contact Message - ${subject || 'General Enquiry'}`,
       html: `
@@ -63,9 +54,10 @@ async function sendContactEmail(data) {
         </table>
       `,
     });
-    console.log(`[Mailer] Contact email sent: ${info.messageId}`);
+    if (error) throw new Error(error.message);
+    console.log(`[Mailer] Contact email sent: ${result.id}`);
   } catch (err) {
-    console.error(`[Mailer] Contact email FAILED:`, err.message, err.code);
+    console.error(`[Mailer] Contact email FAILED:`, err.message);
     throw err;
   }
 }
