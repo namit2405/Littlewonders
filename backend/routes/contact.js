@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Contact = require('../models/Contact');
 const auth = require('../middleware/auth');
+const { sendContactEmail } = require('../utils/mailer');
 
 // POST /api/contact  — public
 router.post('/', async (req, res) => {
@@ -10,6 +11,9 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Please fill in all required fields.' });
     }
     await Contact.create({ name, phone, email, subject, message });
+    // Send notification email (non-blocking)
+    sendContactEmail({ name, phone, email, subject, message })
+      .catch(err => console.error('Contact email error:', err));
     res.status(201).json({ message: 'Thank you! We will be in touch soon.' });
   } catch (err) {
     res.status(500).json({ error: 'Server error, please try again.' });

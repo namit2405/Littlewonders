@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Enrolment = require('../models/Enrolment');
 const auth = require('../middleware/auth');
+const { sendEnrolmentEmail } = require('../utils/mailer');
 
 // POST /api/enrolments  — public
 router.post('/', async (req, res) => {
@@ -10,6 +11,9 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Please fill in all required fields.' });
     }
     await Enrolment.create({ childName, childDob, program, startDate, parentName, parentPhone, parentEmail, message });
+    // Send notification email (non-blocking)
+    sendEnrolmentEmail({ childName, childDob, program, startDate, parentName, parentPhone, parentEmail, message })
+      .catch(err => console.error('Enrolment email error:', err));
     res.status(201).json({ message: 'Enrolment submitted! We will contact you within 24 hours.' });
   } catch (err) {
     res.status(500).json({ error: 'Server error, please try again.' });
