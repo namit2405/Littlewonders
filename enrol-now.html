@@ -1100,8 +1100,12 @@
       </div>
     </footer>
     <script>
-      // TODO: replace with your Render backend URL after deploying
-      const API_BASE = "https://backend.littlewonderselc.com.au";
+      const isLocalhost = ["localhost", "127.0.0.1"].includes(
+        window.location.hostname,
+      );
+      const API_BASE = isLocalhost
+        ? `${window.location.protocol}//${window.location.hostname}:5000`
+        : "https://backend.littlewonderselc.com.au";
 
       document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("enrol-form");
@@ -1123,22 +1127,28 @@
             message:     document.getElementById("message").value,
           };
 
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+
           try {
             const res = await fetch(`${API_BASE}/api/enrolments`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),
+              signal: controller.signal,
             });
             const result = await res.json();
             if (res.ok) {
-              alert("✅ " + result.message);
-              form.reset();
+              window.location.assign("/thank-you.html");
             } else {
               alert("❌ " + result.error);
             }
           } catch (err) {
-            alert("❌ Could not connect to server. Please try again.");
+            alert(err.name === "AbortError"
+              ? "The server is taking too long to respond. Please try again or call us on (03) 5317 9229."
+              : "Could not connect to server. Please try again or call us on (03) 5317 9229.");
           } finally {
+            window.clearTimeout(timeoutId);
             btn.disabled = false;
             btn.textContent = "Submit Enrolment Enquiry";
           }

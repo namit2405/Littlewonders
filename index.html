@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Little Wonders Early Learning</title>
+    <title>Little Wonders Early Learning | Childcare in Sebastopol &amp; Ballarat</title>
+    <meta name="description" content="Discover Little Wonders Early Learning in Sebastopol and Ballarat. Explore our early learning programs, facilities and family information, and book a centre tour.">
      <link rel="shortcut icon" href="/images1/siteicon.jpeg" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -15,9 +16,6 @@
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1424304425767991&ev=PageView&noscript=1"/></noscript>
     <!-- End Meta Pixel Code -->
     <style>
-#lw-home-banner .lw-home-video{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-#lw-home-banner .lw-home-video iframe{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:0;max-width:none;opacity:0;transition:opacity 1s ease}
-#lw-home-banner .lw-home-video.is-playing iframe{opacity:1}
 .lw-lp{--o:#f49b29;--o2:#e2861a;--o3:#fff3e2;--o4:#fde6c6;--ink:#1c1712;--ink2:#4a4239;--mut:#7a7066;--line:#efe6da;--bg:#ffffff;--cream:#fffaf3;--r:22px;--sh:0 24px 60px -24px rgba(60,35,5,.22);
   font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;
   width:100%;max-width:100%;position:relative;overflow:hidden}
@@ -975,111 +973,6 @@
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden" id="lw-home-banner">
-        <div class="relative h-[500px] md:h-[600px] lg:h-[700px]">
-            <div class="absolute inset-0">
-                <img src="/images1/hero.webp" 
-                     alt="Children playing" 
-                     class="w-full h-full object-cover">
-                <div class="lw-home-video" id="lw-home-video" aria-hidden="true">
-                    <iframe id="lw-home-video-frame" title="Little Wonders Early Learning centre video" tabindex="-1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
-                </div>
-                <div class="absolute inset-0 bg-gradient-to-r from-[#000000]/50 to-[#ffffff]/40"></div>
-            </div>
-            
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-                <div class="text-white max-w-3xl animate-fade-in-up">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6">
-                        Little Wonders Early Learning
-                    </h1>
-                    <p class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 md:mb-6">
-                        "Where Curious Minds Begin Their Journey"
-                    </p>
-                    <p class="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 max-w-2xl">
-                        Nurturing young minds in Ballarat and Sebastopol with play-based learning, 
-                        experienced educators, and a warm, welcoming environment.
-                    </p>
-                    <a href="/enrol-now.html" class="hero-button inline-block bg-[#F7B733] text-gray-900 px-8 md:px-12 py-4 md:py-5 rounded-full text-lg md:text-xl font-bold shadow-2xl hover:bg-[#FFA94D]">
-                        ENROL NOW
-                    </a>
-                </div>
-            </div>
-
-            <div class="blob absolute top-10 right-10 w-20 h-20 bg-[#F7B733]"></div>
-            <div class="blob absolute bottom-20 left-10 w-32 h-32 bg-[#8ED16F]"></div>
-
-            <!-- Certificate Badge -->
-            <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
-                <img src="/images1/certificate.jpg" alt="Certificate" class="h-10 md:h-20 lg:h-24 object-contain drop-shadow-lg">
-            </div>
-        </div>
-    </section>
-    <script>
-      (function() {
-        var box = document.getElementById('lw-home-video');
-        var frame = document.getElementById('lw-home-video-frame');
-        if (!box || !frame) return;
-
-        var videoId = '577yautc40s';
-        var start = 4;
-        function sizeVideo() {
-          var width = box.clientWidth;
-          var height = box.clientHeight;
-          if (!width || !height) return;
-          var videoWidth = Math.max(width, height * 16 / 9);
-          var videoHeight = videoWidth * 9 / 16;
-          frame.style.width = videoWidth + 'px';
-          frame.style.height = videoHeight + 'px';
-        }
-        sizeVideo();
-        window.addEventListener('resize', sizeVideo, { passive: true });
-        frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + videoId + '&start=' + start + '&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
-
-        function attachPlayer() {
-          try {
-            new YT.Player(frame.id, {
-              events: {
-                onReady: function(event) {
-                  event.target.mute();
-                  event.target.playVideo();
-                  setTimeout(function() { box.classList.add('is-playing'); }, 700);
-                },
-                onStateChange: function(event) {
-                  if (event.data === YT.PlayerState.PLAYING) box.classList.add('is-playing');
-                  if (event.data === YT.PlayerState.ENDED) {
-                    event.target.seekTo(start, true);
-                    event.target.playVideo();
-                  }
-                }
-              }
-            });
-          } catch (error) {
-            console.error('Unable to initialize the homepage background video:', error);
-          }
-        }
-
-        if (window.YT && window.YT.Player) {
-          attachPlayer();
-          return;
-        }
-        var previousCallback = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = function() {
-          if (typeof previousCallback === 'function') previousCallback();
-          attachPlayer();
-        };
-        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-          var api = document.createElement('script');
-          api.src = 'https://www.youtube.com/iframe_api';
-          api.async = true;
-          document.head.appendChild(api);
-        }
-        setTimeout(function() {
-          if (!box.classList.contains('is-playing')) box.classList.add('is-playing');
-        }, 6000);
-      })();
-    </script>
-
     <!-- Inline SVG icon sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1121,6 +1014,69 @@
 
 
     <div class="lw-lp" id="lw-top">
+  <section class="lw-hero" id="lw-home-banner" aria-label="Little Wonders Early Learning Sebastopol and Ballarat">
+    <div class="lw-hero-vid" id="lw-hero-vid" aria-hidden="true" data-yt="577yautc40s" data-start="4" data-mp4=""></div>
+    <div class="lw-wrap">
+      <div class="lw-hero-in">
+        <a href="#lw-offer" class="lw-pill lw-rv"><b>Limited offer</b> 8 weeks free for new families</a>
+        <h1 class="lw-rv lw-d1">Childcare in Sebastopol &amp; Ballarat where <span>little wonders</span> grow</h1>
+        <p class="lw-hero-tag lw-rv lw-d2">Where curious minds begin their journey.</p>
+        <p class="lw-hero-p lw-rv lw-d2">A warm, family owned early learning centre for children aged 6 weeks to 5 years. Play based programs, experienced educators, fresh meals cooked on site every day and a beautiful bush garden to explore.</p>
+        <div class="lw-hero-cta lw-rv lw-d3">
+          <a href="#lw-visit" class="lw-btn lw-btn-p"><svg class="lw-ico"><use href="#lw-i-cal"/></svg>Book a Centre Tour</a>
+          <a href="tel:0353179229" class="lw-btn lw-btn-g"><svg class="lw-ico"><use href="#lw-i-phone"/></svg>(03) 5317 9229</a>
+        </div>
+        <div class="lw-hero-trust lw-rv lw-d4">
+          <div class="lw-ht"><span class="lw-stars"><svg><use href="#lw-i-star"/></svg><svg><use href="#lw-i-star"/></svg><svg><use href="#lw-i-star"/></svg><svg><use href="#lw-i-star"/></svg><svg><use href="#lw-i-star"/></svg></span>5.0 on Google</div>
+          <div class="lw-ht"><svg class="lw-ico"><use href="#lw-i-clock"/></svg>Open 6:30am to 6:30pm</div>
+          <div class="lw-ht"><svg class="lw-ico"><use href="#lw-i-home"/></svg>Family owned, locally run</div>
+        </div>
+      </div>
+    </div>
+    <span class="lw-scroll" aria-hidden="true"></span>
+  </section>
+  <script>
+  (function(){
+    var box=document.getElementById('lw-hero-vid');
+    if(!box||box.getAttribute('data-init')) return;
+    box.setAttribute('data-init','1');
+    var id=box.getAttribute('data-yt'), start=parseInt(box.getAttribute('data-start')||'0',10), mp4=box.getAttribute('data-mp4');
+    function on(){box.classList.add('playing')}
+    if(mp4){
+      var v=document.createElement('video');
+      v.muted=true;v.defaultMuted=true;v.autoplay=true;v.loop=true;v.playsInline=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('preload','auto');
+      v.src=mp4;v.addEventListener('playing',on);box.appendChild(v);
+      var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
+      return;
+    }
+    var f=document.createElement('iframe');
+    f.id='lw-yt-'+id;f.title='Little Wonders Early Learning centre video';
+    f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+    f.setAttribute('tabindex','-1');f.setAttribute('frameborder','0');
+    f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&controls=0&loop=1&playlist='+id+'&start='+start+'&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin='+encodeURIComponent(location.origin);
+    box.appendChild(f);
+    function nocc(p){try{p.unloadModule('captions');p.unloadModule('cc')}catch(e){}}
+    function attach(){
+      try{
+        new YT.Player(f.id,{events:{
+          onReady:function(e){e.target.mute();e.target.playVideo();nocc(e.target)},
+          onStateChange:function(e){if(e.data===1){nocc(e.target);setTimeout(on,700)}if(e.data===0){e.target.seekTo(start,true);e.target.playVideo()}}
+        }});
+      }catch(err){on()}
+    }
+    if(window.YT&&window.YT.Player){attach()}
+    else{
+      var prev=window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function'){try{prev()}catch(e){}}attach()};
+      if(!document.querySelector('script[src*="youtube.com/iframe_api"]')){
+        var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.async=true;document.head.appendChild(s);
+      }
+    }
+    setTimeout(function(){if(!box.classList.contains('playing')&&!(window.YT&&window.YT.Player))on()},6000);
+  })();
+  </script>
 <!-- ========== TRUST STRIP ========== -->
   <section class="lw-strip" aria-label="Why families trust Little Wonders">
     <div class="lw-strip-in">
@@ -1629,14 +1585,15 @@
     if(!form.checkValidity()){box.textContent='Please complete the required fields and tick the consent box.';box.className='lw-msg err';form.reportValidity&&form.reportValidity();return;}
     var label=btn.innerHTML; btn.disabled=true; btn.textContent='Sending...';
     var data=Object.fromEntries(new FormData(form));
-    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+    var controller=new AbortController(), timeoutId=window.setTimeout(function(){controller.abort()},90000);
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data),signal:controller.signal})
       .then(function(r){return r.json()})
       .then(function(j){
-        if(j.success){box.textContent='Thank you! Your tour request has been received. Our team will call you shortly to confirm a time.';box.className='lw-msg ok';form.reset();}
+        if(j.success){window.location.assign('/thank-you.html');}
         else{box.textContent=j.message||'Something went wrong. Please call us on (03) 5317 9229.';box.className='lw-msg err';}
       })
-      .catch(function(){box.textContent='Something went wrong. Please call us on (03) 5317 9229.';box.className='lw-msg err';})
-      .finally(function(){btn.disabled=false;btn.innerHTML=label;});
+      .catch(function(err){box.textContent=err.name==='AbortError'?'The server is taking too long to respond. Please try again or call us on (03) 5317 9229.':'Something went wrong. Please call us on (03) 5317 9229.';box.className='lw-msg err';})
+      .finally(function(){window.clearTimeout(timeoutId);btn.disabled=false;btn.innerHTML=label;});
   });
 })();
 </script>

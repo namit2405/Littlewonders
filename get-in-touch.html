@@ -1114,28 +1114,32 @@
           };
 
           const msgEl = document.getElementById("form-messages");
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => controller.abort(), 90000);
 
           try {
             const res = await fetch(`${API_BASE}/api/contact`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),
+              signal: controller.signal,
             });
             const result = await res.json();
             msgEl.classList.remove("hidden");
             if (res.ok) {
-              msgEl.className = "text-center p-4 rounded-lg bg-green-100 text-green-700";
-              msgEl.textContent = result.message;
-              form.reset();
+              window.location.assign("/thank-you.html");
             } else {
               msgEl.className = "text-center p-4 rounded-lg bg-red-100 text-red-700";
               msgEl.textContent = result.error;
             }
-          } catch {
+          } catch (err) {
             msgEl.classList.remove("hidden");
             msgEl.className = "text-center p-4 rounded-lg bg-red-100 text-red-700";
-            msgEl.textContent = "Could not connect to server. Please try again.";
+            msgEl.textContent = err.name === "AbortError"
+              ? "The server is taking too long to respond. Please try again or call us on (03) 5317 9229."
+              : "Could not connect to server. Please try again or call us on (03) 5317 9229.";
           } finally {
+            window.clearTimeout(timeoutId);
             btn.disabled = false;
             btn.textContent = "Send Message";
           }

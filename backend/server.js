@@ -15,6 +15,8 @@ app.use(cors({
     'https://littlewonders-tau.vercel.app',
     'https://backend.littlewonderselc.com.au',
     'https://little-wonders-api.onrender.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://localhost:5000',
     'http://localhost:3000'
   ],
