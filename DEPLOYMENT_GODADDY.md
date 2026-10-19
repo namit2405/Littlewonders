@@ -143,6 +143,8 @@ If you want to keep GoDaddy shared hosting for the HTML files:
 The root `.htaccess` file serves the thank-you page at `/thank-you` and redirects
 the old `/thank-you.html` URL to the clean URL. Ensure Apache's `mod_rewrite` is enabled.
 
+For Vercel deployments, the root `vercel.json` provides the equivalent rewrite and redirect.
+
 ### Backend on Render (free tier available)
 1. Push your project to GitHub
 2. Go to https://render.com → New Web Service
