@@ -1043,7 +1043,7 @@
     fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data),signal:controller.signal})
       .then(function(r){return r.json()})
       .then(function(j){
-        if(j.success){window.location.assign('/thank-you.html');}
+        if(j.success){window.location.assign('/thank-you');}
         else{box.textContent=j.message||'Something went wrong. Please call us on (03) 5317 9229.';box.className='lw-msg err';}
       })
       .catch(function(err){box.textContent=err.name==='AbortError'?'The server is taking too long to respond. Please try again or call us on (03) 5317 9229.':'Something went wrong. Please call us on (03) 5317 9229.';box.className='lw-msg err';})

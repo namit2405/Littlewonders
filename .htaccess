@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^thank-you\.html$ /thank-you [R=301,L]
+RewriteRule ^thank-you/$ /thank-you [R=301,L]
+RewriteRule ^thank-you$ thank-you.html [L]

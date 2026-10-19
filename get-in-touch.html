@@ -1127,7 +1127,7 @@
             const result = await res.json();
             msgEl.classList.remove("hidden");
             if (res.ok) {
-              window.location.assign("/thank-you.html");
+              window.location.assign("/thank-you");
             } else {
               msgEl.className = "text-center p-4 rounded-lg bg-red-100 text-red-700";
               msgEl.textContent = result.error;

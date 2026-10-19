@@ -137,8 +137,11 @@ If you want to keep GoDaddy shared hosting for the HTML files:
 
 ### Frontend on GoDaddy Shared Hosting
 1. Log in to GoDaddy → cPanel → File Manager
-2. Upload all HTML, CSS, JS, and image files to `public_html/`
+2. Upload all HTML, CSS, JS, image files, and the root `.htaccess` file to `public_html/`
 3. Do NOT upload the `backend/` folder
+
+The root `.htaccess` file serves the thank-you page at `/thank-you` and redirects
+the old `/thank-you.html` URL to the clean URL. Ensure Apache's `mod_rewrite` is enabled.
 
 ### Backend on Render (free tier available)
 1. Push your project to GitHub
